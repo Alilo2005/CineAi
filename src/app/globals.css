@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-dark-400 text-white font-sans;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply backdrop-blur-lg bg-white/5 border border-white/10;
+    transition: all 0.3s ease;
+  }
+  
+  .glass-effect:hover {
+    @apply bg-white/10 border-white/20;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+  }
+  
+  .gold-gradient {
+    background: linear-gradient(135deg, #ffd700 0%, #ffcc00 50%, #e6b800 100%);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, #ffd700 0%, #ffcc00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .animate-glow {
+    @apply animate-pulse-gold;
+  }
+  
+  .chat-bubble {
+    @apply glass-effect rounded-2xl p-4 max-w-md;
+    animation: slideUp 0.3s ease-out;
+    transition: all 0.3s ease;
+  }
+  
+  .chat-bubble:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  .user-bubble {
+    @apply bg-gold-100/20 border-gold-100/30 ml-auto;
+  }
+  
+  .bot-bubble {
+    @apply bg-white/5 border-white/20 mr-auto;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes pulse-gold {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    }
+  }
+}

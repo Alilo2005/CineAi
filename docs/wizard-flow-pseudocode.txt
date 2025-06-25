@@ -1,0 +1,241 @@
+// Pseudo-code for Movie Recommendation Wizard Flow
+// Platform-agnostic implementation guide
+
+CLASS MovieWizard {
+    // State variables
+    currentStep = 0
+    totalSteps = 6
+    userPreferences = {
+        genres: [],
+        mood: "",
+        decade: "",
+        rating: "",
+        language: "",
+        email: ""
+    }
+    waitingForConfirmation = false
+    pendingResponse = null
+    flowCompleted = false
+    
+    // Step definitions
+    steps = [
+        {
+            field: "genres",
+            question: "What genres do you enjoy?",
+            type: "multi-select",
+            options: ["Action", "Comedy", "Drama", ...],
+            confirmText: dynamic_based_on_count,
+            required: true
+        },
+        {
+            field: "mood", 
+            question: "What's your mood today?",
+            type: "single-select",
+            options: ["Excited", "Relaxed", "Inspired", ...],
+            confirmText: "Perfect choice!",
+            required: true
+        },
+        // ... additional steps
+    ]
+    
+    // Main flow control
+    FUNCTION startWizard() {
+        showWelcomeMessage()
+        currentStep = 0
+        askCurrentQuestion()
+    }
+    
+    FUNCTION askCurrentQuestion() {
+        IF currentStep >= totalSteps THEN
+            generateRecommendation()
+            RETURN
+        END IF
+        
+        step = steps[currentStep]
+        
+        // Skip if already answered (for back navigation)
+        IF isStepAnswered(step) THEN
+            currentStep++
+            askCurrentQuestion()
+            RETURN
+        END IF
+        
+        displayQuestion(step.question)
+        showOptions(step.options, step.type)
+        updateProgressIndicator()
+    }
+    
+    FUNCTION handleUserSelection(selection) {
+        step = steps[currentStep]
+        
+        IF step.type == "multi-select" THEN
+            IF selection NOT IN userPreferences[step.field] THEN
+                userPreferences[step.field].add(selection)
+            END IF
+            
+            IF userPreferences[step.field].length > 0 THEN
+                showConfirmationButton(getConfirmText(step))
+            END IF
+            
+        ELSE IF step.type == "single-select" THEN
+            userPreferences[step.field] = selection
+            showFeedback("Perfect! You selected: " + selection)
+            waitingForConfirmation = true
+            showConfirmationButton(step.confirmText)
+            
+        ELSE IF step.type == "input-or-skip" THEN
+            userPreferences[step.field] = selection
+            
+            IF selection == "skip" THEN
+                showFeedback("No worries! Let's get your recommendation!")
+                generateRecommendation()
+                RETURN
+            ELSE
+                showFeedback("Perfect! I'll send to: " + selection)
+                waitingForConfirmation = true
+                showConfirmationButton(step.confirmText)
+            END IF
+        END IF
+        
+        updateSelectionsSummary()
+    }
+    
+    FUNCTION handleConfirmation() {
+        waitingForConfirmation = false
+        pendingResponse = null
+        
+        showContinueMessage()
+        currentStep++
+        
+        // Small delay for UX
+        delay(800)
+        askCurrentQuestion()
+    }
+    
+    FUNCTION handleEditRequest(targetStep) {
+        // Reset current step
+        currentStep = targetStep
+        step = steps[targetStep]
+        
+        // Clear this step's data and all subsequent steps
+        FOR i = targetStep TO totalSteps-1 DO
+            clearStepData(steps[i].field)
+        END FOR
+        
+        waitingForConfirmation = false
+        pendingResponse = null
+        
+        showEditMessage()
+        delay(800)
+        askCurrentQuestion()
+    }
+    
+    FUNCTION generateRecommendation() {
+        showLoadingMessage()
+        
+        TRY
+            // Call AI service
+            recommendation = callOpenAI(userPreferences)
+            
+            // Get movie details
+            movieData = searchMovieDB(recommendation.title)
+            
+            // Display result
+            showMovieRecommendation(movieData, recommendation.reason)
+            
+            // Send email if provided
+            IF userPreferences.email != "" AND userPreferences.email != "skip" THEN
+                sendEmail(userPreferences.email, movieData, recommendation)
+                showEmailConfirmation()
+            END IF
+            
+            flowCompleted = true
+            showCompletionOptions()
+            
+        CATCH error
+            showErrorMessage("Sorry, I had trouble finding a recommendation.")
+            showRetryOption()
+        END TRY
+    }
+    
+    // Helper functions
+    FUNCTION isStepAnswered(step) {
+        IF step.field == "genres" THEN
+            RETURN userPreferences.genres.length > 0
+        ELSE
+            RETURN userPreferences[step.field] != ""
+        END IF
+    }
+    
+    FUNCTION getConfirmText(step) {
+        IF step.field == "genres" THEN
+            count = userPreferences.genres.length
+            IF count == 1 THEN RETURN "That's perfect!"
+            ELSE IF count == 2 THEN RETURN "Great combo!"
+            ELSE RETURN "Awesome selection!"
+        ELSE
+            RETURN step.confirmText
+        END IF
+    }
+    
+    FUNCTION clearStepData(field) {
+        IF field == "genres" THEN
+            userPreferences.genres = []
+        ELSE
+            userPreferences[field] = ""
+        END IF
+    }
+    
+    FUNCTION updateProgressIndicator() {
+        percentage = ((currentStep + 1) / totalSteps) * 100
+        showProgress(currentStep + 1, totalSteps, percentage)
+    }
+    
+    FUNCTION updateSelectionsSummary() {
+        summary = buildSummaryFromPreferences(userPreferences)
+        displaySummary(summary)
+        showEditButton()
+    }
+    
+    FUNCTION resetWizard() {
+        currentStep = 0
+        userPreferences = resetToDefaults()
+        waitingForConfirmation = false
+        pendingResponse = null
+        flowCompleted = false
+        startWizard()
+    }
+}
+
+// Usage example
+wizard = new MovieWizard()
+wizard.startWizard()
+
+// Event handlers
+ON userSelectsOption(option) {
+    wizard.handleUserSelection(option)
+}
+
+ON userClicksConfirm() {
+    wizard.handleConfirmation()
+}
+
+ON userClicksEdit(stepIndex) {
+    wizard.handleEditRequest(stepIndex)
+}
+
+ON userClicksReset() {
+    wizard.resetWizard()
+}
+
+/* 
+Key Implementation Notes:
+1. No auto-advance - all progression requires explicit confirmation
+2. Multi-select for genres, single-select for everything else
+3. Email step allows skip with immediate recommendation
+4. Edit functionality resets downstream data
+5. Progress tracking and summary updates throughout
+6. Graceful error handling for API calls
+7. Consistent feedback messages for each step
+8. Platform-agnostic design - can be adapted to web, mobile, etc.
+*/

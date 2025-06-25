@@ -1,0 +1,294 @@
+{
+  "flowName": "Movie Recommendation Wizard",
+  "version": "1.0",
+  "description": "Structured step-by-step movie recommendation flow with explicit confirmation at each step",
+  "totalSteps": 6,
+  "confirmationRequired": true,
+  "allowBackNavigation": true,
+  "steps": [
+    {
+      "stepId": 1,
+      "field": "genres",
+      "title": "Genre Selection",
+      "icon": "🎭",
+      "question": "What genres do you enjoy? (Pick as many as you like!)",
+      "type": "multi-select",
+      "required": true,
+      "minSelections": 1,
+      "maxSelections": null,
+      "options": [
+        "Action & Adventure",
+        "Comedy", 
+        "Drama",
+        "Horror & Thriller",
+        "Romance",
+        "Sci-Fi & Fantasy",
+        "Documentary",
+        "Animation",
+        "Mystery & Crime"
+      ],      "confirmationButton": {
+        "dynamic": true,
+        "logic": "selection_count_based",
+        "textOptions": {
+          "1": "That's perfect!",
+          "2": "Great combo!",
+          "3+": "Awesome selection!"
+        },
+        "fallback": "Continue"
+      },
+      "feedback": "Perfect! {selection} selected! 🎬"
+    },
+    {
+      "stepId": 2,
+      "field": "mood",
+      "title": "Mood Selection",
+      "icon": "😊",
+      "question": "What's your mood today? How do you want to feel after watching?",
+      "type": "single-select",
+      "required": true,
+      "options": [
+        "Excited & Energized",
+        "Relaxed & Calm",
+        "Inspired & Motivated",
+        "Entertained & Laughing",
+        "Thoughtful & Reflective",
+        "Scared & Thrilled",
+        "Romantic & Warm"
+      ],      "confirmationButton": {
+        "text": "Perfect choice!"
+      },
+      "feedback": "Perfect! You selected \"{selection}\" ✓",
+      "feedbackTiming": "after_confirmation"
+    },
+    {
+      "stepId": 3,
+      "field": "decade",
+      "title": "Decade Selection",
+      "icon": "📅",
+      "question": "Any preference for the time period?",
+      "type": "single-select",
+      "required": true,
+      "options": [
+        "Latest (2020s)",
+        "Recent (2010s)",
+        "2000s",
+        "90s",
+        "80s",
+        "70s or Earlier",
+        "No Preference"
+      ],      "confirmationButton": {
+        "text": "Awesome!"
+      },
+      "feedback": "Perfect! You selected \"{selection}\" ✓",
+      "feedbackTiming": "after_confirmation"
+    },
+    {
+      "stepId": 4,
+      "field": "rating",
+      "title": "Rating Selection",
+      "icon": "⭐",
+      "question": "What age rating would you prefer?",
+      "type": "single-select",
+      "required": true,
+      "options": [
+        "G (General)",
+        "PG (Parental Guidance)", 
+        "PG-13 (Teens)",
+        "R (Mature)",
+        "No Preference"
+      ],      "confirmationButton": {
+        "text": "Excellent!"
+      },
+      "feedback": "Perfect! You selected \"{selection}\" ✓",
+      "feedbackTiming": "after_confirmation"
+    },
+    {
+      "stepId": 5,
+      "field": "language",
+      "title": "Language Selection", 
+      "icon": "🌍",
+      "question": "Language preference for the movie?",
+      "type": "single-select",
+      "required": true,
+      "options": [
+        "English",
+        "Spanish",
+        "French", 
+        "Japanese",
+        "Korean",
+        "Any Language"
+      ],      "confirmationButton": {
+        "text": "Fantastic!"
+      },
+      "feedback": "Perfect! You selected \"{selection}\" ✓",
+      "feedbackTiming": "after_confirmation"
+    },
+    {
+      "stepId": 6,
+      "field": "email",
+      "title": "Email Collection",
+      "icon": "📧",
+      "question": "Enter your email to receive the recommendation, or skip to just see it here:",
+      "type": "input-or-skip",
+      "required": false,
+      "inputType": "email",
+      "allowSkip": true,
+      "skipOption": {
+        "text": "Skip Email →",
+        "value": "skip"
+      },
+      "confirmationButton": {
+        "text": "Get My Recommendation!"
+      },
+      "feedback": {
+        "email": "Perfect! I'll send your recommendation to {email} ✓",
+        "skip": "No worries! Let's get your recommendation! 🎬"
+      }
+    }
+  ],
+  "finalStep": {
+    "title": "AI Recommendation Generation",
+    "icon": "🤖",
+    "process": [
+      {
+        "step": "loading",
+        "message": "Let me analyze your preferences and find the perfect movie for you...",
+        "showSpinner": true
+      },
+      {
+        "step": "openai_call",
+        "description": "Send preferences to OpenAI API for recommendation"
+      },
+      {
+        "step": "tmdb_search", 
+        "description": "Search TMDB for movie details and poster"
+      },
+      {
+        "step": "display_result",
+        "message": "🎉 Perfect! I found the ideal movie for you: **{movieTitle}**\\n\\n{reason}",
+        "showMovieCard": true
+      },
+      {
+        "step": "email_send",
+        "condition": "email_provided",
+        "message": "📧 Great! I've sent the movie details to {email}. Check your inbox for the recommendation!"
+      },      {
+        "step": "completion",
+        "condition": "email_skipped",
+        "message": "🎬 Perfect! Enjoy your movie night. Feel free to ask for another recommendation anytime!"
+      },
+      {
+        "step": "fallback",
+        "condition": "no_results_or_error",
+        "message": "😿 Oh no! I couldn't find the perfect movie this time. Let's try different preferences or try again!",
+        "actions": ["retry_button", "edit_preferences_button"]
+      }
+    ]
+  },
+  "userExperience": {
+    "progressIndicator": {
+      "enabled": true,
+      "showPercentage": true,
+      "showStepNumbers": true
+    },    "selectionsSummary": {
+      "enabled": true,
+      "showEditButton": true,
+      "realTimeUpdates": true,
+      "updateThrottle": 300,
+      "maxVisibleSelections": 10
+    },
+    "animations": {
+      "framework": "framer-motion",
+      "transitions": {
+        "stepAdvance": 0.3,
+        "buttonHover": 0.2,
+        "feedback": 0.5
+      }
+    },
+    "theme": {
+      "primary": "#ffd700",
+      "secondary": "#ffcc00", 
+      "accent": "#e6b800",
+      "background": "dark with glassmorphism"
+    }
+  },
+  "technicalSpecs": {
+    "framework": "Next.js 15",
+    "language": "TypeScript",
+    "styling": "Tailwind CSS",
+    "animations": "Framer Motion",
+    "stateManagement": "React useState",
+    "apis": {
+      "openai": "GPT recommendations",
+      "tmdb": "Movie data and images", 
+      "emailjs": "Email delivery"
+    }
+  },
+  "validation": {
+    "required": [
+      "At least one genre",
+      "All single-select options",
+      "Email format (if provided)"
+    ],
+    "errorHandling": [
+      "API failures",
+      "Invalid inputs",
+      "Network errors",
+      "Missing responses"
+    ]
+  },  "flowControl": {
+    "advanceCondition": "explicit_confirmation_only",
+    "backNavigation": "edit_button_resets_downstream",
+    "skipOptions": {
+      "available": ["email_step_only"],
+      "extensible": true,
+      "futureOptions": ["decade_step", "rating_step"]
+    },
+    "autoAdvance": false,
+    "confirmationRequired": true,
+    "errorRecovery": {
+      "enabled": true,
+      "retryOptions": ["same_step", "previous_step", "restart_flow"],
+      "maxRetries": 3
+    }
+  },
+  "implementationGuidelines": {
+    "componentMapping": {
+      "multi-select": "checkbox_button_group_with_confirmation",
+      "single-select": "radio_button_group_with_immediate_feedback",
+      "input-or-skip": "text_input_with_skip_button_option",
+      "confirmationButton.dynamic": "conditional_button_text_based_on_selection_count"
+    },
+    "stateManagement": {
+      "required": ["currentStep", "userPreferences", "waitingForConfirmation", "flowCompleted"],
+      "optional": ["pendingResponse", "errorState", "retryCount"]
+    },
+    "apiIntegration": {
+      "authentication": "environment_variables_required",
+      "endpoints": {
+        "openai": "GPT-4 or newer for movie recommendations",
+        "tmdb": "v3 API for movie search and details",
+        "emailjs": "service_id and template_id configuration"
+      },
+      "errorHandling": "graceful_degradation_with_user_feedback"
+    }
+  },
+  "aiPromptingGuide": {
+    "systemPrompt": "You are implementing a movie recommendation wizard based on this JSON specification. Follow the exact flow structure, confirmation patterns, and UX guidelines defined.",    "keyInstructions": [
+      "No auto-advance - every step requires explicit user confirmation",
+      "Multi-select for genres only, single-select for all other steps",
+      "Dynamic button text based on selection count for genres", 
+      "CORRECT FLOW: User selects option → Shows confirmation button → User clicks confirmation → Shows feedback → Advances to next step",
+      "INCORRECT FLOW: User selects option → Shows feedback immediately → Shows confirmation button",
+      "Edit functionality must reset downstream answers",
+      "Email step is optional with skip option",
+      "Implement fallback handling for API failures"
+    ],
+    "codeGenerationHints": {
+      "framework": "Use Next.js 15 with App Router and TypeScript",
+      "styling": "Implement with Tailwind CSS classes, dark theme with gold accents",
+      "animations": "Use Framer Motion for smooth transitions and micro-interactions",
+      "validation": "Client-side validation for email format and required selections"
+    }
+  }
+}

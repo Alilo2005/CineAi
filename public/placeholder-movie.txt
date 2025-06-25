@@ -1,0 +1,7 @@
+# Placeholder Movie Poster
+
+This directory contains placeholder images for the movie recommendation app.
+
+You can add a placeholder movie poster image here named `placeholder-movie.jpg` for movies that don't have poster images available from TMDB.
+
+The recommended size is 500x750 pixels to match TMDB poster dimensions.
