@@ -9,7 +9,7 @@
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![Free](https://img.shields.io/badge/100%25-FREE-gold?style=for-the-badge&logo=gift&logoColor=white)
 
-### 🚀 **[LIVE DEMO](https://cineai-2futhd8bq-ali-mahdis-projects.vercel.app)** 🚀
+### 🚀 **[LIVE DEMO](https://cineai-ali.vercel.app/)** 🚀
 
 *A sophisticated AI-powered movie recommendation chatbot with stunning dark-gold UI, smooth animations, and trailer support. Discover your next favorite movie through intelligent conversations!*
 
