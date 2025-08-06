@@ -22,7 +22,7 @@ export default function Footer() {
             
             <div className="flex items-center space-x-6">
               <motion.a
-                href="mailto:support@aimovierecommender.com"
+                href="ma_mahdi@esi.dz"
                 className="flex items-center space-x-2 text-gold-100 hover:text-gold-200 transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -32,7 +32,7 @@ export default function Footer() {
               </motion.a>
               
               <motion.a
-                href="https://github.com"
+                href="https://github.com/Alilo2005"
                 className="flex items-center space-x-2 text-gold-100 hover:text-gold-200 transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
