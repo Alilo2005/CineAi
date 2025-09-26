@@ -1,35 +1,26 @@
-import { ChatStep } from '../types'
+import { ChatStep } from "../types"
 
 export const getChatSteps = (): ChatStep[] => [
   {
-    id: 'genres',
-    question: "🎭 What genre are you in the mood for? (Choose one that best fits your current vibe)",
+    id: "genres",
+    question: "What genre are you in the mood for? (Choose one that best fits your current vibe)",
     options: [
       "Action",
-      "Adventure", 
-      "Animation",
+      "Animation",  
       "Comedy",
-      "Crime",
-      "Documentary",
       "Drama",
-      "Family",
-      "Fantasy",
-      "History",
       "Horror",
-      "Music",
-      "Mystery",
       "Romance",
       "Science Fiction",
       "Thriller",
-      "War",
-      "Western"
+      "Fantasy"
     ],
-    field: 'genres',
+    field: "genres",
     completed: false
   },
   {
-    id: 'decade',
-    question: "� When was your ideal movie made?",
+    id: "decade",
+    question: "When was your ideal movie made?",
     options: [
       "2020s (2020-2025)",
       "2010s (2010-2019)", 
@@ -40,12 +31,12 @@ export const getChatSteps = (): ChatStep[] => [
       "Classic (Before 1970)",
       "Any Time Period"
     ],
-    field: 'decade',
+    field: "decade",
     completed: false
   },
   {
-    id: 'language',
-    question: "🌍 What language would you prefer?",
+    id: "language",
+    question: "What language would you prefer?",
     options: [
       "English",
       "Korean (한국어)",
@@ -56,12 +47,12 @@ export const getChatSteps = (): ChatStep[] => [
       "Hindi (हिन्दी)",
       "Any Language"
     ],
-    field: 'language',
+    field: "language",
     completed: false
   },
   {
-    id: 'rating',
-    question: "🔞 What content rating fits your mood?",
+    id: "rating",
+    question: "What content rating fits your mood?",
     options: [
       "G - General Audiences",
       "PG - Parental Guidance", 
@@ -70,30 +61,30 @@ export const getChatSteps = (): ChatStep[] => [
       "NC-17 - Adults Only",
       "Any Rating"
     ],
-    field: 'rating',
+    field: "rating",
     completed: false
   },
   {
-    id: 'popularity',
-    question: "📈 Do you want something popular or more of a hidden gem?",
+    id: "popularity",
+    question: "Do you want something popular or more of a hidden gem?",
     options: [
       "Blockbuster hits (Very Popular)",
       "Well-known favorites (Popular)",
       "Moderately known (Some buzz)",
       "Hidden gems (Lesser known)",
-      "Doesn't matter"
+      "Doesnt matter"
     ],
-    field: 'popularity',
+    field: "popularity",
     completed: false
   },
   {
-    id: 'trailer',
-    question: "🎬 Would you like to watch the official trailer with your recommendation?",
+    id: "trailer",
+    question: "Would you like to watch the official trailer with your recommendation?",
     options: [
       "Yes, show me the trailer!",
       "No, just the movie details"
     ],
-    field: 'showTrailer',
+    field: "showTrailer",
     completed: false
   }
 ]

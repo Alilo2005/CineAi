@@ -17,8 +17,8 @@ export default function Home() {
       {/* Main Content */}
       <div className="relative z-20">
         <Header />
-        <div className="flex-1 flex items-center justify-center p-4">
-          <div className="w-full max-w-4xl">
+        <div className="flex-1 flex items-center justify-center px-2 sm:px-4 lg:px-6 py-4">
+          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl">
             <ChatInterface />
           </div>
         </div>

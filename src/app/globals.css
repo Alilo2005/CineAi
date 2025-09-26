@@ -41,7 +41,7 @@
   }
   
   .chat-bubble {
-    @apply glass-effect rounded-2xl p-4 max-w-md;
+    @apply glass-effect rounded-2xl p-3 sm:p-4 max-w-[85%] sm:max-w-md lg:max-w-lg;
     animation: slideUp 0.3s ease-out;
     transition: all 0.3s ease;
   }
@@ -57,6 +57,70 @@
   
   .bot-bubble {
     @apply bg-white/5 border-white/20 mr-auto;
+  }
+  
+  /* Responsive text utilities */
+  .text-responsive-xs {
+    @apply text-xs sm:text-sm;
+  }
+  
+  .text-responsive-sm {
+    @apply text-sm sm:text-base;
+  }
+  
+  .text-responsive-base {
+    @apply text-base sm:text-lg;
+  }
+  
+  .text-responsive-lg {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+  
+  .text-responsive-xl {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+  
+  /* Responsive spacing utilities */
+  .space-responsive-x {
+    @apply space-x-2 sm:space-x-3 lg:space-x-4;
+  }
+  
+  .space-responsive-y {
+    @apply space-y-2 sm:space-y-3 lg:space-y-4;
+  }
+  
+  .p-responsive {
+    @apply p-3 sm:p-4 lg:p-6;
+  }
+  
+  .px-responsive {
+    @apply px-3 sm:px-4 lg:px-6;
+  }
+  
+  .py-responsive {
+    @apply py-3 sm:py-4 lg:py-6;
+  }
+  
+  /* Line clamp utilities for better text overflow handling */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
   
   @keyframes slideUp {
@@ -76,6 +140,17 @@
     }
     50% {
       box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    }
+  }
+  
+  /* Mobile-first responsive breakpoints adjustments */
+  @media (max-width: 640px) {
+    .glass-effect {
+      @apply backdrop-blur-md;
+    }
+    
+    .chat-bubble {
+      @apply rounded-xl;
     }
   }
 }

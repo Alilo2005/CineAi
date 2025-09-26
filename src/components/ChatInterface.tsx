@@ -62,7 +62,7 @@ export default function ChatInterface() {
     const initialMessage: ChatMessage = {
       id: generateMessageId(),
       type: 'bot',
-      content: "🎬 Welcome to CineAI! I'm your personal movie curator. I'll ask you a few questions to find the perfect movie for you today. Ready to discover your next favorite film?",
+      content: "Hi! I'm CineAI, your movie curator. Let's find your perfect film!",
       timestamp: new Date()
     }
     setMessages([initialMessage])
@@ -78,16 +78,8 @@ export default function ChatInterface() {
     
     if (stepIndex < chatSteps.length && chatSteps[stepIndex]) {
       const step = chatSteps[stepIndex]
-      console.log('Asking question for step:', stepIndex, 'question:', step.question)
-      
-      const questionMessage: ChatMessage = {
-        id: generateMessageId(),
-        type: 'bot',
-        content: step.question,
-        timestamp: new Date()
-      }
-      
-      setMessages(prev => [...prev, questionMessage])
+      console.log('Question for step:', stepIndex, 'question:', step.question)
+      // Question is now displayed in the progress indicator, no need for separate bot message
     } else {
       console.log('No question available for step:', stepIndex, 'chatSteps.length:', chatSteps.length)
     }
@@ -135,8 +127,8 @@ export default function ChatInterface() {
           id: generateMessageId(),
           type: 'bot',
           content: showTrailer === 'yes' ? 
-            `Perfect! I'll include the trailer with your recommendation! 🎬` :
-            `Got it! I'll just show you the movie details! 📝`,
+            `Perfect! I'll include the trailer with your recommendation!` :
+            `Got it! I'll just show you the movie details!`,
           timestamp: new Date()
         }
         setMessages(prev => [...prev, trailerMessage])
@@ -168,7 +160,7 @@ export default function ChatInterface() {
     const confirmMessage: ChatMessage = {
       id: generateMessageId(),
       type: 'bot',
-      content: `Perfect! ${Array.isArray(userPreferences.genres) ? userPreferences.genres.join(', ') : 'Unknown genres'} selected! 🎬`,
+      content: `Perfect! ${Array.isArray(userPreferences.genres) ? userPreferences.genres.join(', ') : 'Unknown genres'} selected!`,
       timestamp: new Date()
     }
     setMessages(prev => [...prev, confirmMessage])
@@ -176,14 +168,6 @@ export default function ChatInterface() {
     const nextStep = currentStep + 1
     console.log('handleGenreConfirmation - moving from step', currentStep, 'to step', nextStep)
     
-    const continueMessage: ChatMessage = {
-      id: generateMessageId(),
-      type: 'bot',
-      content: "Let's keep going! 🚀",
-      timestamp: new Date()
-    }
-    setMessages(prev => [...prev, continueMessage])
-
     // Update step first, then ask next question
     setCurrentStep(nextStep)
 
@@ -205,7 +189,7 @@ export default function ChatInterface() {
       const loadingMessage: ChatMessage = {
         id: generateMessageId(),
         type: 'bot',
-        content: "🤖 Let me analyze your preferences and find the perfect movie for you...",
+        content: "Let me analyze your preferences and find the perfect movie for you...",
         timestamp: new Date()
       }
       setMessages(prev => [...prev, loadingMessage])
@@ -219,7 +203,7 @@ export default function ChatInterface() {
         const recommendationMessage: ChatMessage = {
           id: generateMessageId(),
           type: 'bot',
-          content: `🎉 Perfect! I found the ideal movie for you: **${movieData.title}**\n\n${recommendation.reason}`,
+          content: `Perfect! I found the ideal movie for you: **${movieData.title}**\n\n${recommendation.reason}`,
           timestamp: new Date(),
           movie: movieData
         }
@@ -233,7 +217,7 @@ export default function ChatInterface() {
             const trailerMessage: ChatMessage = {
               id: generateMessageId(),
               type: 'bot',
-              content: `🎬 Here's the official trailer for **${movieData.title}**! Get ready for an amazing movie experience!`,
+              content: `Here's the official trailer for **${movieData.title}**! Get ready for an amazing movie experience!`,
               timestamp: new Date(),
               trailerUrl: trailerUrl
             }
@@ -242,7 +226,7 @@ export default function ChatInterface() {
             const noTrailerMessage: ChatMessage = {
               id: generateMessageId(),
               type: 'bot',
-              content: `🎬 Sorry, I couldn't find a trailer for this movie, but I'm sure you'll love it anyway!`,
+              content: `Sorry, I couldn't find a trailer for this movie, but I'm sure you'll love it anyway!`,
               timestamp: new Date()
             }
             setMessages(prev => [...prev, noTrailerMessage])
@@ -253,7 +237,7 @@ export default function ChatInterface() {
         const finalMessage: ChatMessage = {
           id: generateMessageId(),
           type: 'bot',
-          content: `🎬 Perfect! Enjoy your movie night. Feel free to ask for another recommendation anytime!`,
+          content: `Perfect! Enjoy your movie night. Feel free to ask for another recommendation anytime!`,
           timestamp: new Date()
         }
         setMessages(prev => [...prev, finalMessage])
@@ -264,7 +248,7 @@ export default function ChatInterface() {
       const errorMessage: ChatMessage = {
         id: generateMessageId(),
         type: 'bot',
-        content: "😅 Sorry, I had trouble finding a recommendation. Let's try again!",
+        content: "Sorry, I had trouble finding a recommendation. Let's try again!",
         timestamp: new Date()
       }
       setMessages(prev => [...prev, errorMessage])
@@ -295,7 +279,7 @@ export default function ChatInterface() {
       const initialMessage: ChatMessage = {
         id: generateMessageId(),
         type: 'bot',
-        content: "🎬 Welcome back! Ready to find another amazing movie?",
+        content: "Welcome back! Ready for another great movie?",
         timestamp: new Date()
       }
       setMessages([initialMessage])
@@ -324,8 +308,8 @@ export default function ChatInterface() {
       const feedbackMessage: ChatMessage = {
         id: generateMessageId(),
         type: 'bot',        content: currentStepData.field === 'showTrailer' ? 
-          `Perfect! I'll ${pendingResponse.includes('Yes') ? 'include' : 'skip'} the trailer ✓` :
-          `Perfect! You selected "${pendingResponse}" ✓`,
+          `Perfect! I'll ${pendingResponse.includes('Yes') ? 'include' : 'skip'} the trailer` :
+          `Perfect! You selected "${pendingResponse}"`,
         timestamp: new Date()
       }
       setMessages(prev => [...prev, feedbackMessage])
@@ -335,14 +319,6 @@ export default function ChatInterface() {
     
     const nextStep = currentStep + 1
     console.log('handleConfirmation - moving from step', currentStep, 'to step', nextStep)
-
-    const continueMessage: ChatMessage = {
-      id: generateMessageId(),
-      type: 'bot',
-      content: "Let's keep going! 🚀",
-      timestamp: new Date()
-    }
-    setMessages(prev => [...prev, continueMessage])
 
     // Update step first, then ask next question
     setCurrentStep(nextStep)
@@ -363,12 +339,12 @@ export default function ChatInterface() {
       <div className="text-white">Loading...</div>
     </div>
   }    return (
-    <div className="w-full flex justify-center items-start min-h-screen py-8">
-      <div className="glass-effect rounded-3xl p-8 w-full max-w-4xl mx-auto flex flex-col relative overflow-hidden" style={{ minHeight: 'fit-content', height: 'auto' }}>
+    <div className="w-full flex justify-center items-start min-h-screen py-4 sm:py-6 lg:py-8">
+      <div className="glass-effect rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 w-full mx-auto flex flex-col relative overflow-hidden" style={{ minHeight: 'fit-content', height: 'auto' }}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute -top-4 -right-4 w-24 h-24 bg-gold-100/5 rounded-full"
+          className="absolute -top-4 -right-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gold-100/5 rounded-full"
           animate={{ 
             scale: [1, 1.2, 1], 
             rotate: [0, 180, 360] 
@@ -380,7 +356,7 @@ export default function ChatInterface() {
           }}
         />
         <motion.div
-          className="absolute -bottom-4 -left-4 w-16 h-16 bg-gold-200/10 rounded-full"
+          className="absolute -bottom-4 -left-4 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gold-200/10 rounded-full"
           animate={{ 
             scale: [1.2, 1, 1.2], 
             rotate: [360, 180, 0] 
@@ -392,7 +368,7 @@ export default function ChatInterface() {
           }}
         />
         <motion.div
-          className="absolute top-1/3 left-1/4 w-8 h-8 bg-gold-300/5 rounded-full"
+          className="absolute top-1/3 left-1/4 w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-gold-300/5 rounded-full"
           animate={{ 
             y: [0, -20, 0],
             opacity: [0.3, 0.8, 0.3]
@@ -405,11 +381,11 @@ export default function ChatInterface() {
         />
       </div>
 
-      {/* Floating Action Button for Reset */}
-      {chatCompleted && (
+      {/* Floating Action Button for Reset - Disabled in favor of bottom button */}
+      {false && chatCompleted && !isLoading && (recommendedMovie || messages.some(msg => msg.content.includes("Sorry, I had trouble finding a recommendation"))) && (
         <motion.button
           onClick={resetChat}
-          className="absolute top-6 right-6 z-20 w-14 h-14 bg-gradient-to-r from-gold-100 to-gold-300 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl"
+          className="absolute top-4 sm:top-6 right-4 sm:right-6 z-20 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-gold-100 to-gold-300 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl"
           whileHover={{ scale: 1.1, rotate: 180 }}
           whileTap={{ scale: 0.9 }}
           initial={{ opacity: 0, scale: 0, rotate: -180 }}
@@ -417,17 +393,17 @@ export default function ChatInterface() {
           transition={{ type: "spring", bounce: 0.5, duration: 0.8 }}
         >
           <motion.span
-            className="text-dark-400 font-bold text-xl"
+            className="text-dark-400 font-bold text-lg sm:text-xl"
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            ✨
+            New
           </motion.span>
         </motion.button>
       )}      {/* Enhanced Progress Indicator - Always Visible with more spacing */}
       {!chatCompleted && currentStep < chatSteps.length && (
         <motion.div 
-          className="mb-6 p-6 bg-gradient-to-r from-gold-100/10 via-gold-200/10 to-gold-300/10 backdrop-blur-sm rounded-2xl border border-gold-100/30 relative overflow-hidden"
+          className="mb-4 sm:mb-6 p-4 sm:p-6 bg-gradient-to-r from-gold-100/10 via-gold-200/10 to-gold-300/10 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gold-100/30 relative overflow-hidden"
           initial={{ opacity: 0, y: -30, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
@@ -438,24 +414,18 @@ export default function ChatInterface() {
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
           
-          <div className="relative z-10">            <div className="flex items-center justify-between mb-4">
+          <div className="relative z-10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4 space-y-2 sm:space-y-0">
               <motion.span 
-                className="text-base text-gray-200 font-semibold flex items-center gap-3"
+                className="text-sm sm:text-base text-gray-200 font-semibold flex items-center gap-2 sm:gap-3"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <motion.span
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="text-gold-100 text-xl"
-                >
-                  🎯
-                </motion.span>
                 Question {currentStep + 1} of {chatSteps.length}
               </motion.span>
               <motion.span 
-                className="text-sm text-gold-100 font-bold px-4 py-2 bg-gold-100/20 rounded-full border border-gold-100/30"
+                className="text-xs sm:text-sm text-gold-100 font-bold px-3 sm:px-4 py-1.5 sm:py-2 bg-gold-100/20 rounded-full border border-gold-100/30"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4, type: "spring" }}
@@ -464,8 +434,9 @@ export default function ChatInterface() {
               </motion.span>
             </div>
             
-            <div className="w-full bg-white/10 rounded-full h-5 overflow-hidden border border-white/20 mb-6">              <motion.div 
-                className="bg-gradient-to-r from-gold-200 via-gold-100 to-gold-300 h-5 rounded-full relative"
+            <div className="w-full bg-white/10 rounded-full h-4 sm:h-5 overflow-hidden border border-white/20 mb-4 sm:mb-6">
+              <motion.div 
+                className="bg-gradient-to-r from-gold-200 via-gold-100 to-gold-300 h-4 sm:h-5 rounded-full relative"
                 initial={{ width: 0 }}
                 animate={{ width: `${((currentStep + 1) / chatSteps.length) * 100}%` }}
                 transition={{ duration: 1, ease: "easeOut" }}
@@ -476,7 +447,7 @@ export default function ChatInterface() {
                   transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                 />
                 <motion.div
-                  className="absolute right-0 top-0 w-5 h-5 bg-white rounded-full shadow-lg"
+                  className="absolute right-0 top-0 w-4 h-4 sm:w-5 sm:h-5 bg-white rounded-full shadow-lg"
                   animate={{ 
                     scale: [1, 1.3, 1],
                     boxShadow: ["0 0 10px rgba(255,255,255,0.5)", "0 0 20px rgba(255,215,0,0.8)", "0 0 10px rgba(255,255,255,0.5)"]
@@ -487,33 +458,18 @@ export default function ChatInterface() {
             </div>
               {chatSteps[currentStep] && (
               <motion.div 
-                className="p-5 bg-gradient-to-r from-gold-100/15 to-transparent rounded-xl border-l-4 border-gold-100"
+                className="p-3 sm:p-5 bg-gradient-to-r from-gold-100/15 to-transparent rounded-lg sm:rounded-xl border-l-4 border-gold-100"
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
               >
                 <motion.p 
-                  className="text-lg text-gold-100 font-semibold flex items-center gap-4 mb-4"
+                  className="text-base sm:text-lg text-gold-100 font-semibold flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
                 >
-                  <motion.span
-                    className="text-2xl"
-                    animate={{ 
-                      rotate: [0, 15, -15, 0],
-                      scale: [1, 1.1, 1]
-                    }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                  >
-                    {chatSteps[currentStep].question.includes('genres') ? '🎭' :
-                     chatSteps[currentStep].question.includes('mood') ? '😊' :
-                     chatSteps[currentStep].question.includes('time period') ? '📅' :
-                     chatSteps[currentStep].question.includes('rating') ? '⭐' :
-                     chatSteps[currentStep].question.includes('Language') ? '🌍' :
-                     chatSteps[currentStep].question.includes('trailer') ? '🎬' : '❓'}
-                  </motion.span>
-                  <span>
+                  <span className="text-center sm:text-left">
                     {chatSteps[currentStep].question.includes('genres') ? 'Genre Selection' :
                      chatSteps[currentStep].question.includes('mood') ? 'Mood Selection' :
                      chatSteps[currentStep].question.includes('time period') ? 'Decade Selection' :
@@ -524,13 +480,13 @@ export default function ChatInterface() {
                 </motion.p>
                   {/* Current Question Display */}
                 <motion.div
-                  className="p-4 bg-white/10 rounded-lg border border-white/20"
+                  className="p-3 sm:p-4 bg-white/10 rounded-lg border border-white/20"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1 }}
                 >
                   <motion.p 
-                    className="text-white text-base leading-relaxed"
+                    className="text-white text-sm sm:text-base leading-relaxed"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.2 }}
@@ -543,7 +499,7 @@ export default function ChatInterface() {
           </div>
         </motion.div>
       )}      {/* Messages with Enhanced Animations and Better Spacing */}
-      <div className="overflow-y-auto space-y-8 mb-8 px-3 py-2" style={{ maxHeight: '60vh' }}>
+      <div className="overflow-y-auto space-y-4 sm:space-y-6 lg:space-y-8 mb-6 sm:mb-8 px-1 sm:px-3 py-2" style={{ maxHeight: '60vh' }}>
         <AnimatePresence mode="popLayout">
           {messages.map((message, index) => (
             <motion.div
@@ -561,7 +517,7 @@ export default function ChatInterface() {
               className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <motion.div 
-                className={`chat-bubble ${message.type === 'user' ? 'user-bubble' : 'bot-bubble'} max-w-[80%] relative overflow-hidden`}
+                className={`chat-bubble ${message.type === 'user' ? 'user-bubble' : 'bot-bubble'} relative overflow-hidden`}
                 whileHover={{ 
                   scale: 1.02, 
                   y: -3,
@@ -578,12 +534,12 @@ export default function ChatInterface() {
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
                 )}
-                  <div className="flex items-start space-x-4 relative z-10">
+                  <div className="flex items-start space-x-2 sm:space-x-4 relative z-10">
                   <motion.div 
-                    className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
                       message.type === 'user' 
                         ? 'bg-gradient-to-r from-gold-100 to-gold-300' 
-                        : 'bg-gradient-to-r from-blue-400 to-purple-500'
+                        : 'bg-gradient-to-r from-gold-200 via-gold-100 to-gold-300'
                     }`}
                     whileHover={{ 
                       rotate: 360,
@@ -592,7 +548,7 @@ export default function ChatInterface() {
                     transition={{ duration: 0.5 }}
                   >
                     {message.type === 'user' ? (
-                      <User className="w-6 h-6 text-dark-400" />
+                      <User className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-dark-400" />
                     ) : (
                       <motion.div
                         animate={{ 
@@ -601,12 +557,12 @@ export default function ChatInterface() {
                         }}
                         transition={{ duration: 3, repeat: Infinity }}
                       >
-                        <Bot className="w-6 h-6 text-white" />
+                        <Bot className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-dark-400" />
                       </motion.div>
                     )}
                   </motion.div>
                   <div className="flex-1 min-w-0">                    <motion.div 
-                      className="text-white whitespace-pre-line leading-relaxed text-base"
+                      className="text-white whitespace-pre-line leading-relaxed text-sm sm:text-base"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 }}
@@ -615,7 +571,7 @@ export default function ChatInterface() {
                     </motion.div>
                     {message.trailerUrl && (
                       <motion.div 
-                        className="mt-6"
+                        className="mt-4 sm:mt-6"
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ delay: 0.8, duration: 0.5, type: "spring" }}
@@ -627,7 +583,7 @@ export default function ChatInterface() {
                             paddingBottom: '56.25%', 
                             height: 0, 
                             overflow: 'hidden', 
-                            borderRadius: '12px', 
+                            borderRadius: '8px', 
                             boxShadow: '0 10px 30px rgba(255, 215, 0, 0.3)', 
                             margin: '10px 0' 
                           }}
@@ -651,7 +607,7 @@ export default function ChatInterface() {
                     )}
                     {message.movie && (
                       <motion.div 
-                        className="mt-6"
+                        className="mt-4 sm:mt-6"
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ delay: 0.6, duration: 0.5, type: "spring" }}
@@ -687,7 +643,40 @@ export default function ChatInterface() {
         )}
         
         <div ref={messagesEndRef} />
-      </div>      {/* Enhanced Input Options with Better Spacing */}
+      </div>
+
+      {/* Start New Conversation Button - Shows after completion */}
+      {chatCompleted && !isLoading && (
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ type: "spring", bounce: 0.4, delay: 0.5 }}
+          className="flex justify-center py-6 sm:py-8"
+        >
+          <motion.button
+            onClick={resetChat}
+            className="px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-xl sm:rounded-2xl text-dark-400 font-bold text-lg sm:text-xl shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex items-center gap-3"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 25px 50px rgba(255, 215, 0, 0.4)"
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.div
+              className="absolute inset-0 bg-white/20"
+              animate={{ x: ["-100%", "100%"] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            />
+            <motion.span
+              className="relative z-10 flex items-center gap-2"
+              animate={{ x: [0, 2, -2, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              ✨ Start New Conversation
+            </motion.span>
+          </motion.button>
+        </motion.div>
+      )}      {/* Enhanced Input Options with Better Spacing */}
       {!chatCompleted && currentStep < chatSteps.length && !isLoading && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -701,11 +690,11 @@ export default function ChatInterface() {
               initial={{ opacity: 0, y: 15, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ type: "spring", bounce: 0.4 }}
-              className="flex justify-center py-4"
+              className="flex justify-center py-3 sm:py-4"
             >
               <motion.button
                 onClick={() => handleConfirmation('continue')}
-                className="px-12 py-5 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-xl text-dark-400 font-bold text-xl shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                className="px-8 sm:px-12 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg sm:rounded-xl text-dark-400 font-bold text-lg sm:text-xl shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
                 whileHover={{ 
                   scale: 1.05,
                   boxShadow: "0 25px 50px rgba(255, 215, 0, 0.3)"
@@ -742,10 +731,10 @@ export default function ChatInterface() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                 >
-                  <div className="p-4 bg-gradient-to-r from-gold-100/10 to-transparent rounded-lg border-l-4 border-gold-100">
-                    <p className="text-gray-200 text-base font-medium">
+                  <div className="p-3 sm:p-4 bg-gradient-to-r from-gold-100/10 to-transparent rounded-lg border-l-4 border-gold-100">
+                    <p className="text-gray-200 text-sm sm:text-base font-medium">
                       Selected: {Array.isArray(userPreferences.genres) && userPreferences.genres.length > 0 ? (
                         <span className="text-gold-100 font-semibold">
                           {userPreferences.genres.join(', ')}
@@ -756,7 +745,7 @@ export default function ChatInterface() {
                     </p>
                   </div>
                   
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3">
                     {chatSteps[currentStep].options?.map((option, index) => {
                       const currentGenres = Array.isArray(userPreferences.genres) ? userPreferences.genres : []
                       const isSelected = currentGenres.includes(option)
@@ -765,7 +754,7 @@ export default function ChatInterface() {
                           key={option}
                           onClick={() => !isSelected && handleUserResponse(option)}
                           disabled={isSelected}
-                          className={`p-5 rounded-xl transition-all duration-300 relative overflow-hidden text-base font-medium ${
+                          className={`p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl transition-all duration-300 relative overflow-hidden text-xs sm:text-sm lg:text-base font-medium ${
                             isSelected 
                               ? 'bg-gradient-to-r from-gold-100/30 to-gold-300/30 border-2 border-gold-100/70 text-gold-100 cursor-not-allowed'
                               : 'bg-white/5 border-2 border-white/20 text-white hover:bg-gradient-to-r hover:from-gold-100/20 hover:to-gold-300/20 hover:border-gold-100/50'
@@ -799,11 +788,11 @@ export default function ChatInterface() {
                       initial={{ opacity: 0, y: 15, scale: 0.9 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ type: "spring", bounce: 0.4 }}
-                      className="flex justify-center pt-6"
+                      className="flex justify-center pt-4 sm:pt-6"
                     >
                       <motion.button
                         onClick={handleGenreConfirmation}
-                        className="px-12 py-5 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-xl text-dark-400 font-bold text-xl shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                        className="px-8 sm:px-12 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg sm:rounded-xl text-dark-400 font-bold text-lg sm:text-xl shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
                         whileHover={{ 
                           scale: 1.05,
                           boxShadow: "0 25px 50px rgba(255, 215, 0, 0.3)"
@@ -836,18 +825,18 @@ export default function ChatInterface() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                 >
-                  <div className="p-4 bg-gradient-to-r from-gold-100/10 to-transparent rounded-lg border-l-4 border-gold-100">
-                    <p className="text-gray-200 text-base font-medium">
+                  <div className="p-3 sm:p-4 bg-gradient-to-r from-gold-100/10 to-transparent rounded-lg border-l-4 border-gold-100">
+                    <p className="text-gray-200 text-sm sm:text-base font-medium">
                       Choose one option:
                       {pendingResponse && (
-                        <span className="text-gold-100 ml-3 font-semibold">Selected: {pendingResponse}</span>
+                        <span className="text-gold-100 ml-2 sm:ml-3 font-semibold">Selected: {pendingResponse}</span>
                       )}
                     </p>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                     {chatSteps[currentStep].options?.map((option, index) => {
                       const isSelected = pendingResponse === option
                       return (
@@ -855,7 +844,7 @@ export default function ChatInterface() {
                           key={option}
                           onClick={() => !isSelected && handleUserResponse(option)}
                           disabled={isSelected}
-                          className={`p-5 rounded-xl transition-all duration-300 relative overflow-hidden text-base font-medium ${
+                          className={`p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl transition-all duration-300 relative overflow-hidden text-xs sm:text-sm lg:text-base font-medium ${
                             isSelected 
                               ? 'bg-gradient-to-r from-gold-100/30 to-gold-300/30 border-2 border-gold-100/70 text-gold-100 cursor-not-allowed'
                               : 'bg-white/5 border-2 border-white/20 text-white hover:bg-gradient-to-r hover:from-gold-100/20 hover:to-gold-300/20 hover:border-gold-100/50'
@@ -894,7 +883,7 @@ export default function ChatInterface() {
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-4 p-4 bg-gradient-to-r from-gold-100/10 to-transparent rounded-xl border border-gold-100/20 relative overflow-hidden"
+          className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gradient-to-r from-gold-100/10 to-transparent rounded-lg sm:rounded-xl border border-gold-100/20 relative overflow-hidden"
           style={{ height: 'auto', minHeight: 'fit-content' }}
         >
           <motion.div
@@ -904,15 +893,8 @@ export default function ChatInterface() {
           />
           
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-semibold text-gold-100 flex items-center gap-2">
-                <motion.span
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="text-lg"
-                >
-                  📋
-                </motion.span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3 space-y-1 sm:space-y-0">
+              <h3 className="text-sm sm:text-base font-semibold text-gold-100 flex items-center gap-2">
                 Your Selections:
               </h3>
               <motion.button
@@ -931,100 +913,71 @@ export default function ChatInterface() {
                   const editMessage: ChatMessage = {
                     id: generateMessageId(),
                     type: 'bot',
-                    content: "Let's go back and edit your selections! 📝",
+                    content: "Let's go back and edit your selections!",
                     timestamp: new Date()
                   }
                   setMessages(prev => [...prev, editMessage])
                   
                   setTimeout(() => askNextQuestion(), 800)
                 }}
-                className="px-3 py-2 text-sm bg-white/10 border border-white/20 rounded-lg text-white hover:bg-white/20 transition-all duration-300"
+                className="px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm bg-white/10 border border-white/20 rounded-md sm:rounded-lg text-white hover:bg-white/20 transition-all duration-300"
                 whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                ✏️ Edit
+                Edit
               </motion.button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-sm text-gray-300">              {Array.isArray(userPreferences.genres) && userPreferences.genres.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-2 text-xs sm:text-sm text-gray-300">              {Array.isArray(userPreferences.genres) && userPreferences.genres.length > 0 && (
                 <motion.div 
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 sm:gap-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                 >
-                  <span className="text-base">🎭</span>
                   <span className="text-white font-medium">Genres:</span> 
                   <span className="text-gold-100 truncate">{userPreferences.genres.join(', ')}</span>
                 </motion.div>
               )}              {userPreferences.decade && (
                 <motion.div 
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 sm:gap-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
                 >
-                  <span className="text-base">�</span>
                   <span className="text-white font-medium">Decade:</span> 
                   <span className="text-gold-100">{userPreferences.decade}</span>
                 </motion.div>
               )}
               {userPreferences.language && (
                 <motion.div 
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 sm:gap-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <span className="text-base">🌍</span>
                   <span className="text-white font-medium">Language:</span> 
                   <span className="text-gold-100">{userPreferences.language}</span>
                 </motion.div>
               )}
               {userPreferences.rating && (
                 <motion.div 
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 sm:gap-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <span className="text-base">�</span>
                   <span className="text-white font-medium">Rating:</span> 
                   <span className="text-gold-100">{userPreferences.rating}</span>
                 </motion.div>
               )}
               {userPreferences.popularity && (
                 <motion.div 
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 sm:gap-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <span className="text-base">📈</span>
                   <span className="text-white font-medium">Popularity:</span> 
                   <span className="text-gold-100">{userPreferences.popularity}</span>
-                </motion.div>
-              )}
-              {userPreferences.rating && (
-                <motion.div 
-                  className="flex items-center gap-2"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <span className="text-base">⭐</span>
-                  <span className="text-white font-medium">Rating:</span> 
-                  <span className="text-gold-100">{userPreferences.rating}</span>
-                </motion.div>
-              )}
-              {userPreferences.language && (
-                <motion.div 
-                  className="flex items-center gap-2"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  <span className="text-base">🌍</span>
-                  <span className="text-white font-medium">Language:</span> 
-                  <span className="text-gold-100">{userPreferences.language}</span>
                 </motion.div>
               )}
             </div>
