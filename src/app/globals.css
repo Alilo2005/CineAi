@@ -143,6 +143,12 @@
     }
   }
   
+  /* Responsive iframe optimizations */
+  .responsive-iframe {
+    touch-action: manipulation;
+    transform: translateZ(0); /* Hardware acceleration */
+  }
+  
   /* Mobile-first responsive breakpoints adjustments */
   @media (max-width: 640px) {
     .glass-effect {
@@ -151,6 +157,12 @@
     
     .chat-bubble {
       @apply rounded-xl;
+    }
+    
+    /* Better mobile iframe experience */
+    .aspect-video iframe {
+      touch-action: manipulation;
+      -webkit-overflow-scrolling: touch;
     }
   }
 }

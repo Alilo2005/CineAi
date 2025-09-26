@@ -217,7 +217,7 @@ export default function ChatInterface() {
             const trailerMessage: ChatMessage = {
               id: generateMessageId(),
               type: 'bot',
-              content: `Here's the official trailer for **${movieData.title}**! Get ready for an amazing movie experience!`,
+              content: '',
               timestamp: new Date(),
               trailerUrl: trailerUrl
             }
@@ -403,7 +403,7 @@ export default function ChatInterface() {
       )}
 
       {/* Messages with Enhanced Animations and Better Spacing */}
-      <div className="overflow-y-auto space-y-4 sm:space-y-6 lg:space-y-8 mb-6 sm:mb-8 px-1 sm:px-3 py-2" style={{ maxHeight: '60vh' }}>
+      <div className="overflow-y-auto space-y-3 sm:space-y-4 lg:space-y-6 mb-4 sm:mb-6 lg:mb-8 px-2 sm:px-4 py-2" style={{ maxHeight: '60vh' }}>
         <AnimatePresence mode="popLayout">
           {messages.map((message, index) => (
             <motion.div
@@ -465,28 +465,32 @@ export default function ChatInterface() {
                       </motion.div>
                     )}
                   </motion.div>
-                  <div className="flex-1 min-w-0">                    <motion.div 
-                      className="text-white whitespace-pre-line leading-relaxed text-sm sm:text-base"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      <p>{message.content}</p>
-                    </motion.div>
+                  <div className="flex-1 min-w-0">
+                    {message.content && (
+                      <motion.div 
+                        className="text-white whitespace-pre-line leading-relaxed text-sm sm:text-base"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        <p>{message.content}</p>
+                      </motion.div>
+                    )}
                     {message.trailerUrl && (
                       <motion.div 
-                        className="mt-3 sm:mt-4"
+                        className={message.content ? "mt-3 sm:mt-4" : ""}
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ delay: 0.8, duration: 0.5, type: "spring" }}
                       >
-                        <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg border border-gold-100/20">
+                        <div className="relative w-full aspect-video rounded-md sm:rounded-lg overflow-hidden shadow-lg border border-gold-100/20 mx-auto max-w-4xl">
                           <iframe 
                             src={message.trailerUrl}
-                            className="absolute inset-0 w-full h-full"
+                            className="absolute inset-0 w-full h-full responsive-iframe"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowFullScreen
                             title="Movie Trailer"
+                            loading="lazy"
                           />
                         </div>
                       </motion.div>
