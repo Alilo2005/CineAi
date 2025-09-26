@@ -400,105 +400,9 @@ export default function ChatInterface() {
             New
           </motion.span>
         </motion.button>
-      )}      {/* Enhanced Progress Indicator - Always Visible with more spacing */}
-      {!chatCompleted && currentStep < chatSteps.length && (
-        <motion.div 
-          className="mb-4 sm:mb-6 p-4 sm:p-6 bg-gradient-to-r from-gold-100/10 via-gold-200/10 to-gold-300/10 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gold-100/30 relative overflow-hidden"
-          initial={{ opacity: 0, y: -30, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-        >
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-gold-100/5 via-transparent to-gold-300/5"
-            animate={{ x: ["-100%", "100%"] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
-          
-          <div className="relative z-10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4 space-y-2 sm:space-y-0">
-              <motion.span 
-                className="text-sm sm:text-base text-gray-200 font-semibold flex items-center gap-2 sm:gap-3"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                Question {currentStep + 1} of {chatSteps.length}
-              </motion.span>
-              <motion.span 
-                className="text-xs sm:text-sm text-gold-100 font-bold px-3 sm:px-4 py-1.5 sm:py-2 bg-gold-100/20 rounded-full border border-gold-100/30"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4, type: "spring" }}
-              >
-                {Math.round(((currentStep + 1) / chatSteps.length) * 100)}% Complete
-              </motion.span>
-            </div>
-            
-            <div className="w-full bg-white/10 rounded-full h-4 sm:h-5 overflow-hidden border border-white/20 mb-4 sm:mb-6">
-              <motion.div 
-                className="bg-gradient-to-r from-gold-200 via-gold-100 to-gold-300 h-4 sm:h-5 rounded-full relative"
-                initial={{ width: 0 }}
-                animate={{ width: `${((currentStep + 1) / chatSteps.length) * 100}%` }}
-                transition={{ duration: 1, ease: "easeOut" }}
-              >
-                <motion.div
-                  className="absolute inset-0 bg-white/40 rounded-full"
-                  animate={{ x: ["-100%", "100%"] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <motion.div
-                  className="absolute right-0 top-0 w-4 h-4 sm:w-5 sm:h-5 bg-white rounded-full shadow-lg"
-                  animate={{ 
-                    scale: [1, 1.3, 1],
-                    boxShadow: ["0 0 10px rgba(255,255,255,0.5)", "0 0 20px rgba(255,215,0,0.8)", "0 0 10px rgba(255,255,255,0.5)"]
-                  }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-              </motion.div>
-            </div>
-              {chatSteps[currentStep] && (
-              <motion.div 
-                className="p-3 sm:p-5 bg-gradient-to-r from-gold-100/15 to-transparent rounded-lg sm:rounded-xl border-l-4 border-gold-100"
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-              >
-                <motion.p 
-                  className="text-base sm:text-lg text-gold-100 font-semibold flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                >
-                  <span className="text-center sm:text-left">
-                    {chatSteps[currentStep].question.includes('genres') ? 'Genre Selection' :
-                     chatSteps[currentStep].question.includes('mood') ? 'Mood Selection' :
-                     chatSteps[currentStep].question.includes('time period') ? 'Decade Selection' :
-                     chatSteps[currentStep].question.includes('rating') ? 'Rating Selection' :
-                     chatSteps[currentStep].question.includes('Language') ? 'Language Selection' :                     chatSteps[currentStep].question.includes('trailer') ? 'Trailer Preference' : 
-                     `Step ${currentStep + 1}`}
-                  </span>
-                </motion.p>
-                  {/* Current Question Display */}
-                <motion.div
-                  className="p-3 sm:p-4 bg-white/10 rounded-lg border border-white/20"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1 }}
-                >
-                  <motion.p 
-                    className="text-white text-sm sm:text-base leading-relaxed"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.2 }}
-                  >
-                    {chatSteps[currentStep].question}
-                  </motion.p>
-                </motion.div>
-              </motion.div>
-            )}
-          </div>
-        </motion.div>
-      )}      {/* Messages with Enhanced Animations and Better Spacing */}
+      )}
+
+      {/* Messages with Enhanced Animations and Better Spacing */}
       <div className="overflow-y-auto space-y-4 sm:space-y-6 lg:space-y-8 mb-6 sm:mb-8 px-1 sm:px-3 py-2" style={{ maxHeight: '60vh' }}>
         <AnimatePresence mode="popLayout">
           {messages.map((message, index) => (
@@ -571,33 +475,15 @@ export default function ChatInterface() {
                     </motion.div>
                     {message.trailerUrl && (
                       <motion.div 
-                        className="mt-4 sm:mt-6"
+                        className="mt-3 sm:mt-4"
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ delay: 0.8, duration: 0.5, type: "spring" }}
                       >
-                        <div 
-                          style={{ 
-                            position: 'relative', 
-                            width: '100%', 
-                            paddingBottom: '56.25%', 
-                            height: 0, 
-                            overflow: 'hidden', 
-                            borderRadius: '8px', 
-                            boxShadow: '0 10px 30px rgba(255, 215, 0, 0.3)', 
-                            margin: '10px 0' 
-                          }}
-                        >
+                        <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg border border-gold-100/20">
                           <iframe 
-                            src={message.trailerUrl} 
-                            style={{ 
-                              position: 'absolute', 
-                              top: 0, 
-                              left: 0, 
-                              width: '100%', 
-                              height: '100%', 
-                              border: 'none' 
-                            }}
+                            src={message.trailerUrl}
+                            className="absolute inset-0 w-full h-full"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowFullScreen
                             title="Movie Trailer"
@@ -651,16 +537,16 @@ export default function ChatInterface() {
           initial={{ opacity: 0, y: 30, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ type: "spring", bounce: 0.4, delay: 0.5 }}
-          className="flex justify-center py-6 sm:py-8"
+          className="flex justify-center py-4 sm:py-6"
         >
           <motion.button
             onClick={resetChat}
-            className="px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-xl sm:rounded-2xl text-dark-400 font-bold text-lg sm:text-xl shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex items-center gap-3"
+            className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg text-dark-400 font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden flex items-center gap-2"
             whileHover={{ 
-              scale: 1.05,
-              boxShadow: "0 25px 50px rgba(255, 215, 0, 0.4)"
+              scale: 1.02,
+              boxShadow: "0 15px 30px rgba(255, 215, 0, 0.3)"
             }}
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.98 }}
           >
             <motion.div
               className="absolute inset-0 bg-white/20"
@@ -668,15 +554,87 @@ export default function ChatInterface() {
               transition={{ duration: 3, repeat: Infinity }}
             />
             <motion.span
-              className="relative z-10 flex items-center gap-2"
-              animate={{ x: [0, 2, -2, 0] }}
+              className="relative z-10 flex items-center gap-1"
+              animate={{ x: [0, 1, -1, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              ✨ Start New Conversation
+              Start New Conversation
             </motion.span>
           </motion.button>
         </motion.div>
-      )}      {/* Enhanced Input Options with Better Spacing */}
+      )}
+
+      {/* Sticky Progress Indicator - Above Selection Options */}
+      {!chatCompleted && currentStep < chatSteps.length && (
+        <motion.div 
+          className="sticky bottom-0 z-30 bg-gradient-to-r from-gold-100/20 via-gold-200/20 to-gold-300/20 backdrop-blur-lg border-t border-gold-100/30 p-3 sm:p-4 relative overflow-hidden rounded-t-xl"
+          initial={{ opacity: 0, y: 30, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-gold-100/5 via-transparent to-gold-300/5"
+            animate={{ x: ["-100%", "100%"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          <div className="relative z-10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3 space-y-1 sm:space-y-0">
+              <motion.span 
+                className="text-sm text-gray-200 font-semibold"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Question {currentStep + 1} of {chatSteps.length}
+              </motion.span>
+              <motion.span 
+                className="text-xs text-gold-100 font-bold px-2 py-1 bg-gold-100/20 rounded-full border border-gold-100/30"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4, type: "spring" }}
+              >
+                {Math.round(((currentStep + 1) / chatSteps.length) * 100)}% Complete
+              </motion.span>
+            </div>
+            
+            <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden border border-white/20 mb-2">
+              <motion.div 
+                className="bg-gradient-to-r from-gold-200 via-gold-100 to-gold-300 h-3 rounded-full relative"
+                initial={{ width: 0 }}
+                animate={{ width: `${((currentStep + 1) / chatSteps.length) * 100}%` }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-white/40 rounded-full"
+                  animate={{ x: ["-100%", "100%"] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </motion.div>
+            </div>
+
+            {chatSteps[currentStep] && (
+              <motion.div 
+                className="mt-2 p-3 bg-gold-100/10 rounded-lg border border-gold-100/20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                <motion.p 
+                  className="text-sm sm:text-base text-white font-medium text-center leading-relaxed"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  {chatSteps[currentStep].question}
+                </motion.p>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Enhanced Input Options with Better Spacing */}
       {!chatCompleted && currentStep < chatSteps.length && !isLoading && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -694,12 +652,12 @@ export default function ChatInterface() {
             >
               <motion.button
                 onClick={() => handleConfirmation('continue')}
-                className="px-8 sm:px-12 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg sm:rounded-xl text-dark-400 font-bold text-lg sm:text-xl shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg text-dark-400 font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                 whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 25px 50px rgba(255, 215, 0, 0.3)"
+                  scale: 1.02,
+                  boxShadow: "0 15px 30px rgba(255, 215, 0, 0.3)"
                 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <motion.div
                   className="absolute inset-0 bg-white/20"
@@ -792,12 +750,12 @@ export default function ChatInterface() {
                     >
                       <motion.button
                         onClick={handleGenreConfirmation}
-                        className="px-8 sm:px-12 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg sm:rounded-xl text-dark-400 font-bold text-lg sm:text-xl shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                        className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg text-dark-400 font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                         whileHover={{ 
-                          scale: 1.05,
-                          boxShadow: "0 25px 50px rgba(255, 215, 0, 0.3)"
+                          scale: 1.02,
+                          boxShadow: "0 15px 30px rgba(255, 215, 0, 0.3)"
                         }}
-                        whileTap={{ scale: 0.95 }}
+                        whileTap={{ scale: 0.98 }}
                       >
                         <motion.div
                           className="absolute inset-0 bg-white/20"
