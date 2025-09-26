@@ -41,7 +41,7 @@
   }
   
   .chat-bubble {
-    @apply glass-effect rounded-2xl p-3 sm:p-4 max-w-[85%] sm:max-w-md lg:max-w-lg;
+    @apply glass-effect rounded-2xl p-3 sm:p-4 max-w-[95%] sm:max-w-md lg:max-w-lg;
     animation: slideUp 0.3s ease-out;
     transition: all 0.3s ease;
   }
@@ -150,7 +150,7 @@
     }
     
     .chat-bubble {
-      @apply rounded-xl;
+      @apply rounded-xl w-full max-w-full;
     }
   }
 }
