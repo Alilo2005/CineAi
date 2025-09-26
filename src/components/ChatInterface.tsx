@@ -203,7 +203,8 @@ export default function ChatInterface() {
         const recommendationMessage: ChatMessage = {
           id: generateMessageId(),
           type: 'bot',
-          content: `Perfect! I found the ideal movie for you: **${movieData.title}**\n\n${recommendation.reason}`,
+          // Keep this concise; long explanations felt overwhelming on mobile
+          content: `Perfect! I found the ideal movie for you: **${movieData.title}**`,
           timestamp: new Date(),
           movie: movieData
         }
@@ -217,7 +218,7 @@ export default function ChatInterface() {
             const trailerMessage: ChatMessage = {
               id: generateMessageId(),
               type: 'bot',
-              content: `Here's the official trailer for **${movieData.title}**! Get ready for an amazing movie experience!`,
+              content: ``,
               timestamp: new Date(),
               trailerUrl: trailerUrl
             }
@@ -471,7 +472,8 @@ export default function ChatInterface() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 }}
                     >
-                      <p>{message.content}</p>
+                      {/* Light clamp on long bot messages to avoid huge blocks of text */}
+                      <p className={`${message.type === 'bot' && message.content.length > 220 ? 'line-clamp-3' : ''}`}>{message.content}</p>
                     </motion.div>
                     {message.trailerUrl && (
                       <motion.div 
