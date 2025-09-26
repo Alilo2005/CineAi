@@ -218,7 +218,7 @@ export default function ChatInterface() {
             const trailerMessage: ChatMessage = {
               id: generateMessageId(),
               type: 'bot',
-              content: ``,
+              content: `Here's the trailer for ${movieData.title}! Enjoy!`,
               timestamp: new Date(),
               trailerUrl: trailerUrl
             }
