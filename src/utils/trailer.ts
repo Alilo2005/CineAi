@@ -47,7 +47,8 @@ export async function getMovieTrailer(movieId: number): Promise<string | null> {
     )
 
     if (trailer) {
-      return `https://www.youtube.com/embed/${trailer.key}?autoplay=1&rel=0&modestbranding=1`
+      // Return YouTube embed URL without autoplay for better UX
+      return `https://www.youtube.com/embed/${trailer.key}?rel=0&modestbranding=1&controls=1`
     }
 
     return null

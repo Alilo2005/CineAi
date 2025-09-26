@@ -212,6 +212,7 @@ export default function ChatInterface() {
         // Handle trailer functionality
         if (preferences.showTrailer === 'yes') {
           const trailerUrl = await getMovieTrailer(movieData.id)
+          console.log('Generated trailer URL:', trailerUrl) // Debug log
           
           if (trailerUrl) {
             const trailerMessage: ChatMessage = {
@@ -483,14 +484,15 @@ export default function ChatInterface() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ delay: 0.8, duration: 0.5, type: "spring" }}
                       >
-                        <div className="relative w-full aspect-video rounded-md sm:rounded-lg overflow-hidden shadow-lg border border-gold-100/20 mx-auto max-w-4xl">
+                        <div className="relative w-full aspect-video rounded-md sm:rounded-lg overflow-hidden shadow-lg border border-gold-100/20 mx-auto max-w-4xl bg-black">
                           <iframe 
                             src={message.trailerUrl}
                             className="absolute inset-0 w-full h-full responsive-iframe"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                             allowFullScreen
                             title="Movie Trailer"
                             loading="lazy"
+                            frameBorder="0"
                           />
                         </div>
                       </motion.div>

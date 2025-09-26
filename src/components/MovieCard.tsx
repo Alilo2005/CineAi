@@ -3,12 +3,17 @@
 import { motion } from 'framer-motion'
 import { Instagram } from 'lucide-react'
 import { Movie } from '../types'
+import Image from 'next/image'
 
 interface MovieCardProps {
   movie: Movie
 }
 
 export default function MovieCard({ movie }: MovieCardProps) {
+  const posterUrl = movie.poster_path 
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : '/placeholder-movie.jpg'
+
   const shareToInstagramDM = () => {
     const shareText = `Check out this movie recommendation from CineAI!\n\n${movie.title} (${new Date(movie.release_date).getFullYear()})\nRating: ${movie.vote_average.toFixed(1)}/10\n\n${movie.overview.slice(0, 150)}...\n\nMore details: https://www.themoviedb.org/movie/${movie.id}\n\n#CineAI #MovieRecommendation`
     
@@ -38,14 +43,44 @@ export default function MovieCard({ movie }: MovieCardProps) {
       transition={{ duration: 0.3 }}
       className="w-full max-w-4xl mx-auto space-y-3 px-2 sm:px-4"
     >
-      <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg border border-gold-100/20">
-        <iframe
-          src={`https://www.themoviedb.org/movie/${movie.id}`}
-          className="absolute inset-0 w-full h-full responsive-iframe"
-          title={`${movie.title} - TMDB Details`}
-          allow="fullscreen"
-          loading="lazy"
-        />
+      {/* Movie Details Card */}
+      <div className="glass-effect rounded-xl p-4 sm:p-6 border border-gold-100/20">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+          {/* Movie Poster */}
+          <div className="flex-shrink-0 mx-auto sm:mx-0">
+            <div className="relative w-32 sm:w-40 lg:w-48 aspect-[2/3] rounded-lg overflow-hidden shadow-lg border border-gold-100/20">
+              <Image
+                src={posterUrl}
+                alt={movie.title}
+                fill
+                className="object-cover"
+                loading="lazy"
+                sizes="(max-width: 640px) 128px, (max-width: 1024px) 160px, 192px"
+              />
+            </div>
+          </div>
+          
+          {/* Movie Info */}
+          <div className="flex-1 space-y-3 sm:space-y-4 text-center sm:text-left">
+            <div>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gold-100 mb-2">
+                {movie.title}
+              </h3>
+              <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2 sm:gap-4 text-sm text-gold-200/80">
+                <span className="flex items-center gap-1">
+                  <span>⭐</span>
+                  <span className="font-medium">{movie.vote_average.toFixed(1)}/10</span>
+                </span>
+                <span>•</span>
+                <span>{new Date(movie.release_date).getFullYear()}</span>
+              </div>
+            </div>
+            
+            <p className="text-white/90 leading-relaxed text-sm sm:text-base line-clamp-3 sm:line-clamp-4">
+              {movie.overview}
+            </p>
+          </div>
+        </div>
       </div>
       
       {/* Instagram DM Share Button */}

@@ -68,8 +68,25 @@
     @apply text-sm sm:text-base;
   }
   
-  .text-responsive-base {
+    .text-responsive-lg {
     @apply text-base sm:text-lg;
+  }
+  
+  /* Line clamp utilities */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   
   .text-responsive-lg {
