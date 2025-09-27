@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Star, Calendar, Clock, Instagram } from 'lucide-react'
+import { Star, Calendar, Clock, Instagram, PlayCircle } from 'lucide-react'
 import { Movie } from '../types'
 import Image from 'next/image'
 
@@ -59,6 +59,11 @@ export default function MovieCard({ movie }: MovieCardProps) {
     }
   }
 
+  // Build a Rivestream search URL using the movie title (and year if available)
+  const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : undefined
+  const rivestreamQuery = [movie.title, releaseYear].filter(Boolean).join(' ')
+  const rivestreamUrl = `https://rivestream.org/search?q=${encodeURIComponent(rivestreamQuery)}`
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -111,6 +116,20 @@ export default function MovieCard({ movie }: MovieCardProps) {
           >
             View Details
           </motion.button>
+          
+          {/* Rivestream search button */}
+          <motion.a
+            href={rivestreamUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Find ${movie.title} on Rivestream`}
+            className="w-full py-2 px-3 bg-white/5 border border-gold-100/40 rounded-lg text-gold-100 text-xs sm:text-sm font-medium hover:bg-gold-100/10 hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <PlayCircle className="w-3 h-3" />
+            <span>Find on Rivestream</span>
+          </motion.a>
           
           <motion.button
             className="w-full py-2 px-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg text-white text-xs sm:text-sm font-medium hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
