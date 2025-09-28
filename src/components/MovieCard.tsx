@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Star, Calendar, Clock, Instagram, PlayCircle } from 'lucide-react'
+import { Star, Calendar, Clock, PlayCircle, Download } from 'lucide-react'
 import { Movie } from '../types'
 import Image from 'next/image'
 
@@ -14,48 +14,40 @@ export default function MovieCard({ movie }: MovieCardProps) {
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : '/placeholder-movie.jpg'
 
-  const shareToInstagram = () => {
-    const shareText = `Just found my perfect movie with CineAI!\n\n${movie.title} (${new Date(movie.release_date).getFullYear()})\nRating: ${movie.vote_average.toFixed(1)}/10\n\n${movie.overview.slice(0, 140)}...\n\n#CineAI #MovieRecommendation #AI #Movies #Film`
-
-    const tmdbUrl = `https://www.themoviedb.org/movie/${movie.id}`
-
-    // 1) Prefer the Web Share API (lets users pick Instagram DMs on mobile)
-    if (typeof window !== 'undefined' && window.navigator && 'share' in window.navigator) {
-      // Web Share API available
-      (window.navigator as any)
-        .share({ title: `${movie.title} • CineAI`, text: shareText, url: tmdbUrl })
-        .catch(() => {
-          // If user cancels or share fails, try opening Instagram Direct as fallback
-          const igDirectAppUrl = 'instagram://direct'
-          const igDirectWebUrl = 'https://www.instagram.com/direct/new/'
-          const link = document.createElement('a')
-          link.href = igDirectAppUrl
-          link.click()
-          setTimeout(() => {
-            window.open(igDirectWebUrl, '_blank')
-          }, 1200)
-        })
+  // Download the full-size poster image; falls back to opening in a new tab
+  const downloadPoster = async () => {
+    if (!movie.poster_path) {
+      window.alert('No poster available to download for this title.')
       return
     }
 
-    // 2) Fallback: attempt to open Instagram Direct (app), then web "New message"
-    const igDirectAppUrl = 'instagram://direct'
-    const igDirectWebUrl = 'https://www.instagram.com/direct/new/'
+    const originalUrl = `https://image.tmdb.org/t/p/original${movie.poster_path}`
+    const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : undefined
+    const slug = `${movie.title}${releaseYear ? '-' + releaseYear : ''}`
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+    const fileName = `${slug}-poster.jpg`
 
-    const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      window.navigator.userAgent
-    )
-
-    if (isMobile) {
-      const link = document.createElement('a')
-      link.href = igDirectAppUrl
-      link.click()
-      setTimeout(() => {
-        window.open(igDirectWebUrl, '_blank')
-      }, 1200)
-    } else {
-      // Desktop: open Instagram web DMs compose
-      window.open(igDirectWebUrl, '_blank')
+    try {
+      const res = await fetch(originalUrl, { mode: 'cors' })
+      if (!res.ok) throw new Error('Failed to fetch image')
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      // Some CDNs may block CORS; open the original image so users can save manually
+      const a = document.createElement('a')
+      a.href = originalUrl
+      a.target = '_blank'
+      a.rel = 'noopener noreferrer'
+      a.click()
     }
   }
 
@@ -132,14 +124,15 @@ export default function MovieCard({ movie }: MovieCardProps) {
           </motion.a>
           
           <motion.button
-            className="w-full py-2 px-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg text-white text-xs sm:text-sm font-medium hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
-            whileHover={{ scale: 1.02, boxShadow: "0 8px 25px rgba(236, 72, 153, 0.3)" }}
+            className="w-full py-2 px-3 bg-gradient-to-r from-gold-200 to-gold-400 rounded-lg text-dark-400 text-xs sm:text-sm font-medium hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(255, 215, 0, 0.3)' }}
             whileTap={{ scale: 0.98 }}
-            onClick={shareToInstagram}
-            title="Share via Instagram DM"
+            onClick={downloadPoster}
+            title="Download Poster"
+            aria-label={`Download poster for ${movie.title}`}
           >
-            <Instagram className="w-3 h-3" />
-            <span>Share via Instagram DM</span>
+            <Download className="w-3 h-3" />
+            <span>Download Poster</span>
           </motion.button>
         </div>
       </div>

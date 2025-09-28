@@ -238,7 +238,7 @@ export default function ChatInterface() {
         const finalMessage: ChatMessage = {
           id: generateMessageId(),
           type: 'bot',
-          content: `Perfect! Enjoy your movie night. Feel free to ask for another recommendation anytime!`,
+          content: `Perfect! Enjoy your movie night ❤.`,
           timestamp: new Date()
         }
         setMessages(prev => [...prev, finalMessage])
@@ -422,7 +422,7 @@ export default function ChatInterface() {
               className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <motion.div 
-                className={`chat-bubble ${message.type === 'user' ? 'user-bubble' : 'bot-bubble'} relative overflow-hidden`}
+                className={`chat-bubble ${message.type === 'user' ? 'user-bubble' : 'bot-bubble'} ${message.trailerUrl ? 'chat-bubble-wide' : ''} relative overflow-hidden`}
                 whileHover={{ 
                   scale: 1.02, 
                   y: -3,
