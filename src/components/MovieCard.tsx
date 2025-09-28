@@ -1,7 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { Star, Calendar, Clock, PlayCircle, Download } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Star, Calendar, Clock, PlayCircle, Download, CheckCircle2, AlertCircle } from 'lucide-react'
 import { Movie } from '../types'
 import Image from 'next/image'
 import { getMovieTrailer } from '../utils/trailer'
@@ -52,10 +53,33 @@ export default function MovieCard({ movie }: MovieCardProps) {
     }
   }
 
-  // Build a Rivestream search URL using the movie title (and year if available)
+  // Rivestream search URL can include year for relevance, but clipboard should copy title only
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : undefined
   const rivestreamQuery = [movie.title, releaseYear].filter(Boolean).join(' ')
   const rivestreamUrl = `https://rivestream.org/search?q=${encodeURIComponent(rivestreamQuery)}`
+  const clipboardQuery = movie.title
+
+  // Toast state for clipboard feedback
+  const [copied, setCopied] = useState<null | 'ok' | 'fail'>(null)
+  
+  // Prefetch trailer for instant open
+  const [prefetchedTrailer, setPrefetchedTrailer] = useState<string | null>(null)
+  const [trailerLoading, setTrailerLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    let cancelled = false
+    const prefetch = async () => {
+      try {
+        setTrailerLoading(true)
+        const url = await getMovieTrailer(movie.id)
+        if (!cancelled) setPrefetchedTrailer(url)
+      } finally {
+        if (!cancelled) setTrailerLoading(false)
+      }
+    }
+    prefetch()
+    return () => { cancelled = true }
+  }, [movie.id])
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -86,7 +110,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="glass-effect rounded-xl overflow-hidden w-full max-w-sm sm:max-w-md mx-auto"
+      className="glass-effect rounded-xl overflow-hidden w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto"
     >
       <div className="relative">
         <Image
@@ -94,7 +118,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
           alt={movie.title}
           width={500}
           height={750}
-          className="w-full h-40 sm:h-48 md:h-56 object-cover"
+          className="w-full h-56 sm:h-72 md:h-80 object-cover"
         />
         <div className="absolute top-2 right-2 bg-black/70 rounded-md px-2 py-1 flex items-center space-x-1">
           <Star className="w-3 h-3 text-gold-100" />
@@ -146,7 +170,9 @@ export default function MovieCard({ movie }: MovieCardProps) {
             onClick={async (e) => {
               // Copy query for user convenience, then open in a new tab
               e.preventDefault()
-              await copyToClipboard(rivestreamQuery)
+              const ok = await copyToClipboard(clipboardQuery)
+              setCopied(ok ? 'ok' : 'fail')
+              setTimeout(() => setCopied(null), 1400)
               window.open(rivestreamUrl, '_blank', 'noopener,noreferrer')
             }}
             title="Copies the movie title to clipboard and opens Rivestream"
@@ -173,7 +199,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={async () => {
-              const url = await getMovieTrailer(movie.id)
+              const url = prefetchedTrailer ?? (await getMovieTrailer(movie.id))
               if (url) {
                 window.open(url, '_blank')
               } else {
@@ -184,10 +210,37 @@ export default function MovieCard({ movie }: MovieCardProps) {
             aria-label={`Watch trailer for ${movie.title}`}
           >
             <PlayCircle className="w-3 h-3" />
-            <span>Watch Trailer</span>
+            <span>{trailerLoading && !prefetchedTrailer ? 'Loading trailer…' : 'Watch Trailer'}</span>
           </motion.button>
         </div>
       </div>
+
+      {/* Copied Toast */}
+      <AnimatePresence>
+        {copied && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute inset-x-0 bottom-2 mx-auto w-[90%] sm:w-auto sm:min-w-[220px] px-3 py-2 rounded-lg border backdrop-blur bg-gold-100/15 border-gold-100/30 text-gold-100 text-xs sm:text-sm flex items-center justify-center gap-2"
+            role="status"
+            aria-live="polite"
+          >
+            {copied === 'ok' ? (
+              <>
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Title copied to clipboard</span>
+              </>
+            ) : (
+              <>
+                <AlertCircle className="w-4 h-4" />
+                <span>Couldn’t copy, opened Rivestream</span>
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
