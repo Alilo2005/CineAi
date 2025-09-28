@@ -26,8 +26,6 @@ export const getChatSteps = (): ChatStep[] => [
       "2010s (2010-2019)", 
       "2000s (2000-2009)",
       "1990s (1990-1999)",
-      "1980s (1980-1989)",
-      "1970s (1970-1979)",
       "Classic (Before 1970)",
       "Any Time Period"
     ],
@@ -77,14 +75,5 @@ export const getChatSteps = (): ChatStep[] => [
     field: "popularity",
     completed: false
   },
-  {
-    id: "trailer",
-    question: "Would you like to watch the official trailer with your recommendation?",
-    options: [
-      "Yes, show me the trailer!",
-      "No, just the movie details"
-    ],
-    field: "showTrailer",
-    completed: false
-  }
+  
 ]

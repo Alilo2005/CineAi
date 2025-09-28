@@ -30,7 +30,6 @@ export interface UserPreferences {
   language: string;
   rating: string;
   popularity: string;
-  showTrailer: string;
 }
 
 export interface ChatStep {
