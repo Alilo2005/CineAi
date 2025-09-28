@@ -15,8 +15,9 @@ export default function Footer() {
         <div className="glass-effect rounded-2xl p-4 sm:p-6">
           <div className="flex flex-col items-center gap-4 text-xs sm:text-sm">
             <div className="flex items-center gap-2 text-gray-300 text-center">
-              <span>Made with by</span>
+              <span>Made with </span>
               <Heart className="w-4 h-4 text-red-500 animate-pulse" />
+              <span>by</span>
                 <a
                 href="https://alilo2005.github.io/"
                 target="_blank"
