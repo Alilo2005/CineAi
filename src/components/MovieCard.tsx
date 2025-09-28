@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Star, Calendar, Clock, PlayCircle, Download } from 'lucide-react'
 import { Movie } from '../types'
 import Image from 'next/image'
+import { getMovieTrailer } from '../utils/trailer'
 
 interface MovieCardProps {
   movie: Movie
@@ -56,12 +57,36 @@ export default function MovieCard({ movie }: MovieCardProps) {
   const rivestreamQuery = [movie.title, releaseYear].filter(Boolean).join(' ')
   const rivestreamUrl = `https://rivestream.org/search?q=${encodeURIComponent(rivestreamQuery)}`
 
+  const copyToClipboard = async (text: string) => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text)
+        return true
+      }
+    } catch {}
+    // Fallback for older browsers/non-secure contexts
+    try {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.focus()
+      textarea.select()
+      const ok = document.execCommand('copy')
+      document.body.removeChild(textarea)
+      return ok
+    } catch {
+      return false
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="glass-effect rounded-xl overflow-hidden w-full max-w-xs sm:max-w-sm mx-auto"
+      className="glass-effect rounded-xl overflow-hidden w-full max-w-sm sm:max-w-md mx-auto"
     >
       <div className="relative">
         <Image
@@ -97,7 +122,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
           {movie.overview}
         </p>
         
-        <div className="flex flex-col gap-2">
+  <div className="flex flex-col gap-2">
           <motion.button
             className="w-full py-2 gold-gradient rounded-lg text-dark-400 text-xs sm:text-sm font-medium hover:shadow-lg transition-all duration-200"
             whileHover={{ scale: 1.02 }}
@@ -118,6 +143,13 @@ export default function MovieCard({ movie }: MovieCardProps) {
             className="w-full py-2 px-3 bg-white/5 border border-gold-100/40 rounded-lg text-gold-100 text-xs sm:text-sm font-medium hover:bg-gold-100/10 hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={async (e) => {
+              // Copy query for user convenience, then open in a new tab
+              e.preventDefault()
+              await copyToClipboard(rivestreamQuery)
+              window.open(rivestreamUrl, '_blank', 'noopener,noreferrer')
+            }}
+            title="Copies the movie title to clipboard and opens Rivestream"
           >
             <PlayCircle className="w-3 h-3" />
             <span>Find on Rivestream</span>
@@ -133,6 +165,26 @@ export default function MovieCard({ movie }: MovieCardProps) {
           >
             <Download className="w-3 h-3" />
             <span>Download Poster</span>
+          </motion.button>
+
+          {/* Watch Trailer Button */}
+          <motion.button
+            className="w-full py-2 px-3 bg-white/5 border border-gold-100/40 rounded-lg text-gold-100 text-xs sm:text-sm font-medium hover:bg-gold-100/10 hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={async () => {
+              const url = await getMovieTrailer(movie.id)
+              if (url) {
+                window.open(url, '_blank')
+              } else {
+                window.alert('Trailer not available for this title.')
+              }
+            }}
+            title={`Watch trailer for ${movie.title}`}
+            aria-label={`Watch trailer for ${movie.title}`}
+          >
+            <PlayCircle className="w-3 h-3" />
+            <span>Watch Trailer</span>
           </motion.button>
         </div>
       </div>

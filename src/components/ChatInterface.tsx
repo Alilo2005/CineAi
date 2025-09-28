@@ -21,8 +21,7 @@ export default function ChatInterface() {
     decade: '',
     language: '',
     rating: '',
-    popularity: '',
-    showTrailer: ''
+  popularity: ''
   })
   const [isLoading, setIsLoading] = useState(false)
   const [chatCompleted, setChatCompleted] = useState(false)
@@ -114,30 +113,7 @@ export default function ChatInterface() {
       updatedPreferences.genres = [...currentGenres, response]
       setUserPreferences(updatedPreferences)
       return    } else {
-      // Handle trailer preference
-      if (currentStepData.field === 'showTrailer') {
-        const showTrailer = response.includes('Yes') ? 'yes' : 'no'
-        updatedPreferences = {
-          ...updatedPreferences,
-          showTrailer: showTrailer
-        } as UserPreferences
-        setUserPreferences(updatedPreferences)
-          
-        const trailerMessage: ChatMessage = {
-          id: generateMessageId(),
-          type: 'bot',
-          content: showTrailer === 'yes' ? 
-            `Perfect! I'll include the trailer with your recommendation!` :
-            `Got it! I'll just show you the movie details!`,
-          timestamp: new Date()
-        }
-        setMessages(prev => [...prev, trailerMessage])
-        
-        setTimeout(() => {
-          getRecommendation(updatedPreferences)
-        }, 800)
-        return
-      }
+      // No trailer preference step anymore
       
       setWaitingForConfirmation(true)
       setPendingResponse(response)
@@ -210,29 +186,7 @@ export default function ChatInterface() {
         }
         setMessages(prev => [...prev, recommendationMessage])
         
-        // Handle trailer functionality
-        if (preferences.showTrailer === 'yes') {
-          const trailerUrl = await getMovieTrailer(movieData.id)
-          
-          if (trailerUrl) {
-            const trailerMessage: ChatMessage = {
-              id: generateMessageId(),
-              type: 'bot',
-              content: `Here's the trailer for ${movieData.title}! Enjoy!`,
-              timestamp: new Date(),
-              trailerUrl: trailerUrl
-            }
-            setMessages(prev => [...prev, trailerMessage])
-          } else {
-            const noTrailerMessage: ChatMessage = {
-              id: generateMessageId(),
-              type: 'bot',
-              content: `Sorry, I couldn't find a trailer for this movie, but I'm sure you'll love it anyway!`,
-              timestamp: new Date()
-            }
-            setMessages(prev => [...prev, noTrailerMessage])
-          }
-        }
+        // Trailer embed removed; trailer will be accessed via button on the movie card
         
         // Final message
         const finalMessage: ChatMessage = {
@@ -264,12 +218,11 @@ export default function ChatInterface() {
     setCurrentStep(0)
     setMessageIdCounter(0)
     setUserPreferences({
-      genres: [],
-      decade: '',
-      language: '',
-      rating: '',
-      popularity: '',
-      showTrailer: ''
+  genres: [],
+  decade: '',
+  language: '',
+  rating: '',
+  popularity: ''
     })
     setChatCompleted(false)
     setRecommendedMovie(null)
@@ -308,9 +261,8 @@ export default function ChatInterface() {
       
       const feedbackMessage: ChatMessage = {
         id: generateMessageId(),
-        type: 'bot',        content: currentStepData.field === 'showTrailer' ? 
-          `Perfect! I'll ${pendingResponse.includes('Yes') ? 'include' : 'skip'} the trailer` :
-          `Perfect! You selected "${pendingResponse}"`,
+        type: 'bot',
+        content: `Perfect! You selected "${pendingResponse}"`,
         timestamp: new Date()
       }
       setMessages(prev => [...prev, feedbackMessage])
@@ -422,7 +374,7 @@ export default function ChatInterface() {
               className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <motion.div 
-                className={`chat-bubble ${message.type === 'user' ? 'user-bubble' : 'bot-bubble'} ${message.trailerUrl ? 'chat-bubble-wide' : ''} relative overflow-hidden`}
+                className={`chat-bubble ${message.type === 'user' ? 'user-bubble' : 'bot-bubble'} relative overflow-hidden`}
                 whileHover={{ 
                   scale: 1.02, 
                   y: -3,
@@ -475,24 +427,7 @@ export default function ChatInterface() {
                       {/* Light clamp on long bot messages to avoid huge blocks of text */}
                       <p className={`${message.type === 'bot' && message.content.length > 220 ? 'line-clamp-3' : ''}`}>{message.content}</p>
                     </motion.div>
-                    {message.trailerUrl && (
-                      <motion.div 
-                        className="mt-3 sm:mt-4"
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        transition={{ delay: 0.8, duration: 0.5, type: "spring" }}
-                      >
-                        <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg border border-gold-100/20">
-                          <iframe 
-                            src={message.trailerUrl}
-                            className="absolute inset-0 w-full h-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowFullScreen
-                            title="Movie Trailer"
-                          />
-                        </div>
-                      </motion.div>
-                    )}
+                    {/* Trailer embed removed in favor of button on MovieCard */}
                     {message.movie && (
                       <motion.div 
                         className="mt-4 sm:mt-6"
