@@ -17,17 +17,18 @@ export default function Footer() {
             <div className="flex items-center gap-1.5 text-gray-300 text-center">
               <span>Made with</span>
               <Heart className="w-3.5 h-3.5 text-red-500 animate-pulse" />
-                <a
+              <span>by</span>
+              <a
                 href="https://alilo2005.github.io/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gold-100 hover:text-gold-200 underline transition-colors"
-                >
-                by Mahdi Ali
-                </a>
+                className="text-gold-100 hover:text-gold-200 transition-colors"
+              >
+                Mahdi Ali
+              </a>
             </div>
-            
-            {/* Action links - wrap and center on small screens */}
+
+            {/* Action links */}
             <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4">
               <motion.a
                 href="mailto:ma_mahdi@esi.dz"
@@ -39,7 +40,7 @@ export default function Footer() {
                 <Mail className="w-3.5 h-3.5" />
                 <span>Contact</span>
               </motion.a>
-              
+
               <motion.a
                 href="https://github.com/Alilo2005"
                 aria-label="Visit GitHub profile"
@@ -53,7 +54,7 @@ export default function Footer() {
                 <span>GitHub</span>
               </motion.a>
             </div>
-            
+
             <p className="text-[10px] sm:text-xs text-gray-400 text-center leading-snug">
               Discover amazing movies tailored just for you • Powered by AI
             </p>
