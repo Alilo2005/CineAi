@@ -188,14 +188,7 @@ export default function ChatInterface() {
         
         // Trailer embed removed; trailer will be accessed via button on the movie card
         
-        // Final message
-        const finalMessage: ChatMessage = {
-          id: generateMessageId(),
-          type: 'bot',
-          content: `Perfect! Enjoy your movie night ❤.`,
-          timestamp: new Date()
-        }
-        setMessages(prev => [...prev, finalMessage])
+        // No final outro message; keep the UI focused on the recommendation card
       }
       
     } catch (error) {
@@ -356,7 +349,7 @@ export default function ChatInterface() {
       )}
 
       {/* Messages with Enhanced Animations and Better Spacing */}
-      <div className="overflow-y-auto space-y-4 sm:space-y-6 lg:space-y-8 mb-6 sm:mb-8 px-1 sm:px-3 py-2" style={{ maxHeight: '60vh' }}>
+  <div className="overflow-y-auto space-y-4 sm:space-y-6 lg:space-y-8 mb-6 sm:mb-8 px-1 sm:px-3 py-2" style={{ maxHeight: '72vh' }}>
         <AnimatePresence mode="popLayout">
           {messages.map((message, index) => (
             <motion.div
@@ -374,7 +367,7 @@ export default function ChatInterface() {
               className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <motion.div 
-                className={`chat-bubble ${message.type === 'user' ? 'user-bubble' : 'bot-bubble'} relative overflow-hidden`}
+                className={`chat-bubble ${message.type === 'user' ? 'user-bubble' : 'bot-bubble'} ${message.movie ? 'chat-bubble-wide' : ''} relative overflow-hidden`}
                 whileHover={{ 
                   scale: 1.02, 
                   y: -3,

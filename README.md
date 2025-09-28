@@ -11,7 +11,7 @@
 
 ### 🚀 **[LIVE DEMO](https://cineai-ali.vercel.app/)** 🚀
 
-*A sophisticated AI-powered movie recommendation chatbot with stunning dark-gold UI, smooth animations, and trailer support. Discover your next favorite movie through intelligent conversations!*
+*A sophisticated AI-powered movie recommendation chatbot with a dark‑gold UI, smooth animations, and rich actions like Download Poster, Watch Trailer, and one‑click Rivestream search.*
 
 ---
 
@@ -71,16 +71,15 @@ graph LR
     C --> D[🌍 Pick Language]
     D --> E[⭐ Set Rating]
     E --> F[🔥 Choose Popularity]
-    F --> G[🎥 Trailer Option]
-    G --> H[🤖 AI Processing]
-    H --> I[🎊 Perfect Movie!]
+    F --> G[🤖 AI Processing]
+    G --> H[🎊 Perfect Movie!]
 ```
 
 <div align="center">
 
 ### 💫 **Experience the Magic** 💫
 
-**Interactive Chat Interface** → **AI Analysis** → **Perfect Movie Match** → **Watch Trailers**
+**Interactive Chat Interface** → **AI Analysis** → **Perfect Movie Match** → **Actions: Download Poster / Watch Trailer / Rivestream**
 
 </div>
 
@@ -157,21 +156,24 @@ NEXT_PUBLIC_HUGGINGFACE_API_KEY=your_huggingface_key_here
 
 <div align="center">
 
-| 🎬 **Movie Discovery** | 🎥 **Trailer Integration** | 🎨 **Beautiful UI** |
+| 🎬 **Movie Discovery** | ⚙️ **Handy Actions** | 🎨 **Beautiful UI** |
 |:---:|:---:|:---:|
-| Smart AI recommendations | Official trailers with video player | Dark gold theme with glassmorphism |
-| TMDB database integration | YouTube trailer embedding | Framer Motion animations |
-| Genre-based filtering | High-quality video streaming | Responsive design |
+| Smart AI recommendations | Download Poster as JPG | Dark gold theme with glassmorphism |
+| TMDB database integration | Watch Trailer in a new tab | Framer Motion animations |
+| Genre-based filtering | Rivestream: copies title to clipboard + opens search | Responsive design |
 
 </div>
 
-### � **User Experience Flow**
+### 🧭 **User Experience Flow**
 
 1. **🎭 Chat Interface**: Engaging conversation with the AI
 2. **🎨 Preference Collection**: Genre, decade, language, rating preferences
 3. **🤖 AI Processing**: Smart analysis using Hugging Face models
 4. **🎬 Movie Presentation**: Beautiful movie cards with all details
-5. **🎥 Trailer Viewing**: Watch official trailers directly in the app
+5. **⚙️ Quick Actions**:
+    - **Download Poster**: Saves the poster locally (with CORS‑safe fallback)
+    - **Watch Trailer**: Opens the official trailer in a new tab (prefetched)
+    - **Find on Rivestream**: Copies the movie title to your clipboard and opens Rivestream search
 
 ### 💫 **Interactive Elements**
 
@@ -279,5 +281,13 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ### 🎬 **Built with ❤️, AI, and lots of ☕** 
 
 **Ready to discover your next favorite movie?** [**Try CineAI Now!**](https://cineai-2futhd8bq-ali-mahdis-projects.vercel.app) 🚀
+
+## 🔄 Recent Changes
+
+- Removed the in-chat trailer embed and the “show trailer?” question for a cleaner flow
+- Added a Watch Trailer button on the movie card (opens in new tab; URL is prefetched for speed)
+- Rivestream button now copies the movie title to your clipboard before opening the search
+- Added a small in-card toast confirming clipboard copy
+- Download Poster action now fetches the high‑res image and falls back to opening in a new tab if needed
 
 </div>
