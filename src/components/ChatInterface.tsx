@@ -467,11 +467,11 @@ export default function ChatInterface() {
           initial={{ opacity: 0, y: 30, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ type: "spring", bounce: 0.4, delay: 0.5 }}
-          className="flex justify-center py-4 sm:py-6"
+          className="flex justify-center py-2 sm:py-3"
         >
           <motion.button
             onClick={resetChat}
-            className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg text-dark-400 font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden flex items-center gap-2"
+            className="px-3 sm:px-4 py-2 sm:py-2 bg-gradient-to-r from-gold-100 via-gold-200 to-gold-300 rounded-lg text-dark-400 font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden flex items-center gap-2"
             whileHover={{ 
               scale: 1.02,
               boxShadow: "0 15px 30px rgba(255, 215, 0, 0.3)"

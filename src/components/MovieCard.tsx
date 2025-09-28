@@ -31,6 +31,25 @@ export default function MovieCard({ movie }: MovieCardProps) {
       .replace(/(^-|-$)/g, '')
     const fileName = `${slug}-poster.jpg`
 
+    // Mobile browsers (especially iOS Safari) often block programmatic downloads
+    // and ignore the download attribute for cross-origin URLs. Open in a new tab instead.
+    try {
+      const ua = navigator.userAgent || ''
+      const isIpadOS = (navigator.platform === 'MacIntel' && (navigator as any).maxTouchPoints > 1)
+      const isIOS = /iPad|iPhone|iPod/.test(ua) || isIpadOS
+      const isAndroid = /Android/i.test(ua)
+      const isMobile = isIOS || isAndroid
+
+      if (isMobile) {
+        const a = document.createElement('a')
+        a.href = originalUrl
+        a.target = '_blank'
+        a.rel = 'noopener noreferrer'
+        a.click()
+        return
+      }
+    } catch { /* continue to desktop flow */ }
+
     try {
       const res = await fetch(originalUrl, { mode: 'cors' })
       if (!res.ok) throw new Error('Failed to fetch image')
