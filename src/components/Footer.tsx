@@ -15,15 +15,15 @@ export default function Footer() {
         <div className="glass-effect rounded-2xl p-4 sm:p-6">
           <div className="flex flex-col items-center gap-4 text-xs sm:text-sm">
             <div className="flex items-center gap-2 text-gray-300 text-center">
-              <span>Made with</span>
+              <span>Made with by</span>
               <Heart className="w-4 h-4 text-red-500 animate-pulse" />
                 <a
                 href="https://alilo2005.github.io/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gold-100 hover:text-gold-200 underline transition-colors"
+                className="text-gold-100 hover:text-gold-200 transition-colors"
                 >
-                by Mahdi Ali
+                 Mahdi Ali
                 </a>
             </div>
             
